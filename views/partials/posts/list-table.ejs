@@ -1,0 +1,21 @@
+<table class="border border-black mt-4">
+    <thead>
+        <tr>
+            <td>ID</td>
+            <td>Title</td>
+            <td>Detail</td>
+        </tr>
+    </thead>
+    <tbody>
+        <% posts.forEach(post=> { %>
+        <tr>
+            <td><%= post.id %></td>
+            <td><%= post.title %></td>
+            <td>
+                <a class="text-blue-400 underline" href=<%= `/posts/${post.id}`
+                    %>>See Detail</a>
+            </td>
+        </tr>
+        <% }) %>
+    </tbody>
+</table>
