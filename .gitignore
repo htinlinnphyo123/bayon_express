@@ -5,3 +5,4 @@ dist/
 .env
 /.vscode
 /.marscode
+/swagger/swagger-output.json

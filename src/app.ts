@@ -1,7 +1,9 @@
 import express, { Express } from "express";
 import { ddMiddleware } from "../middleware/ddMiddleware"
+import responseHelper from "../utils/response-helper";
 
 const app: Express = express();
+app.use(responseHelper);
 app.use(ddMiddleware);
 app.use(express.json());
 
@@ -9,12 +11,12 @@ app.use(express.json());
 import mobileRoutes from "../routes/mobileApi";
 import spaApi from "../routes/spaApi";
 import webApi from "../routes/webApi";
+import swagger from "../swagger/config";
 
-//Mobile
+app.use(swagger);
+
 app.use("/api/mobile", mobileRoutes);
-//Spa
-//app.use("/api/spa",spaApi)
-//Web
+app.use("/api/spa",spaApi)
 app.use("/api/web",webApi);
 
 

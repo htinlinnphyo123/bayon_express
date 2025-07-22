@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "swagger": "node swagger/generate-swagger.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts"
   },
   "author": "",
@@ -19,6 +20,9 @@
     "express-validator": "^7.2.1",
     "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.10",
+    "swagger-autogen": "^2.23.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "uuid": "^11.1.0"
   },
   "devDependencies": {
