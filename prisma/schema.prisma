@@ -2035,10 +2035,10 @@ type UsersProfile {
 type UsersServices {
   /// Field referred in an index, but found no data to define the type.
   email    UsersServicesEmail?
-  facebook UsersServicesFacebook
-  google   UsersServicesGoogle
+  facebook UsersServicesFacebook?
+  google   UsersServicesGoogle?
   password UsersServicesPassword
-  resume   UsersServicesResume
+  resume   UsersServicesResume?
 }
 
 type UsersServicesEmail {
@@ -2052,16 +2052,16 @@ type UsersServicesEmailVerificationTokens {
 }
 
 type UsersServicesFacebook {
-  accessToken String
-  email       String
+  accessToken String?
+  email       String?
   /// Multiple data types found: Float: 8.3%, Int: 91.7% out of 60 sampled entries
-  expiresAt   Json
-  first_name  String
-  id          String
-  last_name   String
-  name        String
-  name_format String
-  picture     UsersServicesFacebookPicture
+  expiresAt   Json?
+  first_name  String?
+  id          String?
+  last_name   String?
+  name        String?
+  name_format String?
+  picture     UsersServicesFacebookPicture?
   short_name  String?
 }
 
@@ -2079,13 +2079,13 @@ type UsersServicesFacebookPictureData {
 }
 
 type UsersServicesGoogle {
-  accessToken    String
-  email          String
-  expiresAt      Int
-  id             String
-  picture        String
+  accessToken    String?
+  email          String?
+  expiresAt      Int?
+  id             String?
+  picture        String?
   scope          String[]
-  verified_email Boolean
+  verified_email Boolean?
 }
 
 type UsersServicesPassword {
@@ -4037,12 +4037,10 @@ model users {
   emails             UsersEmails[]
   facebook           String?
   followerCount      Int?
-  /// Could not determine type: the field only had null or empty values in the sample set.
   ipList             Json?
   job_level          String?
   locationId         String?
   loginTokens        String
-  /// Could not determine type: the field only had null or empty values in the sample set.
   module             Json?
   notificationId     String?
   occupation         String?
@@ -4052,7 +4050,6 @@ model users {
   profile            UsersProfile
   renewDate          String?
   roles              String[]
-  /// Multiple data types found: Array(String): 99.9%, Array(Unknown): 0.1% out of 851 sampled entries
   segmentList        Json?
   services           UsersServices
   smsCode            String

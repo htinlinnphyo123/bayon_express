@@ -17,3 +17,4 @@ export const registerAuthValidator: ValidationChain[] = [
     .notEmpty()
     .withMessage("Password is required"),
 ];
+

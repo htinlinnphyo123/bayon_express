@@ -6,8 +6,8 @@ export const baseRepository = <TModel>(
   let query: {
     where: Record<string, any>;
     include: Record<string, boolean>;
-    select?: Record<string, boolean>; 
-    orderBy?: Record<string, 'asc' | 'desc'>;// Add select property here
+    select?: Record<string, boolean>;
+    orderBy?: Record<string, "asc" | "desc">; // Add select property here
   } = {
     where: {},
     include: {},
@@ -68,7 +68,7 @@ export const baseRepository = <TModel>(
       return builder;
     },
     //Order by
-    order(field: string, direction: 'asc' | 'desc' = 'asc') {
+    order(field: string, direction: "asc" | "desc" = "asc") {
       query.orderBy = { [field]: direction };
       return builder;
     },
@@ -83,12 +83,14 @@ export const baseRepository = <TModel>(
       };
 
       if (query.select && query.include) {
-        throw new Error('Cannot use both select and include in the same query.');
+        throw new Error(
+          "Cannot use both select and include in the same query."
+        );
       } else if (query.select) {
         queryOptions.select = query.select;
       } else if (query.include) {
         queryOptions.include = query.include;
-      }else if (query.orderBy) {
+      } else if (query.orderBy) {
         queryOptions.orderBy = query.orderBy;
       }
 
@@ -97,20 +99,16 @@ export const baseRepository = <TModel>(
       return result;
     },
     //Get data with pagination
-    async  getWithPaginate(page:number = 1, limit:number = 10, search:string | null = "") {      
-      const skip = (page - 1) * limit;      
-      const searchCondition = search
-        ? {
-            OR: [
-              { name: { contains: search } },
-              { description: { contains: search } },
-            ],
-          }
-        : {};
-
+    async getWithPaginate(page = 1, limit = 10, search = "") {
+      const skip = (page - 1) * limit;
       const baseWhere = {
-        deletedAt: null,
-        ...searchCondition,
+        ...(search && {
+          OR: [
+            { name: { contains: search } },
+            { description: { contains: search } },
+          ],
+        }),
+        ...query.where,
       };
 
       const [data, total] = await Promise.all([
@@ -121,9 +119,7 @@ export const baseRepository = <TModel>(
           include: query.include || {},
           orderBy: query.orderBy || {},
         }),
-        model.count({
-          where: baseWhere,
-        }),
+        model.count({ where: baseWhere })
       ]);
 
       return {
@@ -153,7 +149,7 @@ export const baseRepository = <TModel>(
       return result;
     },
     //Create data
-    async create(data: Partial<TModel>) {      
+    async create(data: Partial<TModel>) {
       return model.create({ data });
     },
     //Update data by id

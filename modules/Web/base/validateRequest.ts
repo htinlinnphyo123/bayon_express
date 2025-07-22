@@ -15,8 +15,6 @@ export function validateRequest(
         message: e.msg,
       })),
     });
-    return; 
   }
-
   next();
 }
