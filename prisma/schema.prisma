@@ -3,48 +3,4145 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
-model Category {
-  id          Int       @id @default(autoincrement())
+type AssociationAuditData {
+  id          String    @map("_id")
+  countryId   String
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String
+  logo        String?
   name        String
-  description String?
-  products    Product[] 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
+  shortName   String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
 }
 
-model Product {
-  id          Int       @id @default(autoincrement())
-  categoryId  Int?
-  category    Category? @relation(fields: [categoryId], references: [id]) 
-  name        String  @unique
-  description String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  imageUrls   Json?   
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
+type AuAutoAuditData {
+  id                String                           @map("_id")
+  address           String?
+  autoBranch        String?
+  autoBranchDoc     AuAutoAuditDataAutoBranchDoc?
+  autoCondition     String
+  autoSubBranch     String?
+  autoSubBranchDoc  AuAutoAuditDataAutoSubBranchDoc?
+  autoType          String
+  bodyType          String?
+  branchId          String?
+  code              String
+  color             String?
+  countryCode       String
+  createdAt         DateTime                         @db.Date
+  createdUser       String
+  currencyCode      String
+  currencySymbol    String
+  desc              String?
+  districtDoc       AuAutoAuditDataDistrictDoc?
+  districtId        String?
+  firstCreatedAt    DateTime                         @db.Date
+  fuelType          String?
+  geolocation       AuAutoAuditDataGeolocation
+  groupType         String
+  lastPrice         Int?
+  locationDoc       AuAutoAuditDataLocationDoc?
+  locationId        String
+  numFav            Int
+  numRenew          Int
+  phoneNumberPrefix String
+  position          AuAutoAuditDataPosition
+  /// Multiple data types found: Float: 5.3%, Int: 94.7% out of 581 sampled entries
+  price             Json
+  priceShort        String
+  shareUrl          String?
+  status            String
+  taxType           String?
+  title             String
+  transmissionType  String?
+  updatedAt         DateTime?                        @db.Date
+  updatedUser       String?
+  /// Multiple data types found: Array(String): 90.3%, Array(Unknown): 9.7% out of 581 sampled entries
+  urlList           Json?
+  userDoc           AuAutoAuditDataUserDoc?
+  view              Int
+  year              String?
 }
 
-model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
-  name     String?
-  password String
-  roleId   Int?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
-  createdBy   Int?
-  updatedBy   Int?
-  deletedAt   DateTime?
-  deletedBy   Int?
+type AuAutoAuditDataAutoBranchDoc {
+  id          String   @map("_id")
+  autoType    String
+  createdAt   DateTime @db.Date
+  createdUser String
+  desc        String?
+  name        String
+  status      Boolean
+}
+
+type AuAutoAuditDataAutoSubBranchDoc {
+  id           String   @map("_id")
+  autoBranchId String
+  autoType     String
+  createdAt    DateTime @db.Date
+  createdUser  String
+  desc         String?
+  name         String
+  status       Boolean
+}
+
+type AuAutoAuditDataDistrictDoc {
+  id          String   @map("_id")
+  countryId   String
+  createdAt   DateTime @db.Date
+  createdUser String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  description Json?
+  khName      String
+  locationId  String
+  name        String
+  status      Boolean
+}
+
+type AuAutoAuditDataGeolocation {
+  coordinates Float[]
+  type        String
+}
+
+type AuAutoAuditDataLocationDoc {
+  id          String    @map("_id")
+  countryId   String
+  khName      String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type AuAutoAuditDataPosition {
+  lat Float
+  lng Float
+}
+
+type AuAutoAuditDataUserDoc {
+  id                 String                         @map("_id")
+  agencyId           String
+  agentId            String
+  bio                String?
+  branch             String[]
+  coverUrl           String?
+  createdAt          DateTime                       @db.Date
+  defaultBranch      String
+  developerId        String
+  dob                String?
+  education          String?
+  email              String
+  emails             AuAutoAuditDataUserDocEmails[]
+  facebook           String?
+  followerCount      Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  ipList             Json?
+  job_level          String?
+  locationId         String?
+  loginTokens        String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  occupation         String?
+  payment_qr_code    String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            AuAutoAuditDataUserDocProfile
+  renewDate          String?
+  roles              String[]
+  segmentList        String[]
+  services           AuAutoAuditDataUserDocServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  type               String?
+  url                String
+  userType           String
+  username           String
+  verificationStatus String?
+  yearly_income      String?
+}
+
+type AuAutoAuditDataUserDocEmails {
+  address  String
+  verified Boolean
+}
+
+type AuAutoAuditDataUserDocProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  userLogin              Int
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type AuAutoAuditDataUserDocServices {
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  facebook Json
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  google   Json
+  password AuAutoAuditDataUserDocServicesPassword
+  resume   AuAutoAuditDataUserDocServicesResume?
+}
+
+type AuAutoAuditDataUserDocServicesPassword {
+  bcrypt String
+}
+
+type AuAutoAuditDataUserDocServicesResume {
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  loginTokens Json?
+}
+
+type AuAutoBranchAuditData {
+  id          String   @map("_id")
+  autoType    String
+  createdAt   DateTime @db.Date
+  createdUser String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  desc        Json?
+  name        String
+  status      Boolean
+}
+
+type AuAutoGeolocation {
+  coordinates Float[]
+  type        String
+}
+
+type AuAutoPosition {
+  lat Float
+  lng Float
+}
+
+type AuAutoSubBranchAuditData {
+  id           String   @map("_id")
+  autoBranchId String
+  autoType     String
+  createdAt    DateTime @db.Date
+  createdUser  String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  desc         Json?
+  name         String
+  status       Boolean
+}
+
+type BackupAdvertiseAdvertiseDoc {
+  id          String    @map("_id")
+  agentId     String?
+  count       Int
+  countryCode String
+  createdAt   DateTime  @db.Date
+  createdUser String?
+  expiredDate String
+  propertyId  String?
+  startDate   String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type BackupAgentAgentDoc {
+  id                    String    @map("_id")
+  address               String?
+  agentType             String
+  associationId         String?
+  associationMemberCode String?
+  countryId             String
+  createdAt             DateTime  @db.Date
+  createdUser           String?
+  description           String?
+  dob                   String?
+  email                 String?
+  heart                 Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  heartedUsers          Json?
+  isFormal              Boolean?
+  isRenew               String?
+  license               String?
+  locationId            String?
+  memberCode            String
+  name                  String
+  phoneNumber           String
+  photo                 String?
+  startDate             String?
+  status                Boolean
+  telegram              String?
+  totalProperty         Int?
+  type                  String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  upLineListId          Json?
+  updatedAt             DateTime? @db.Date
+  updatedUser           String?
+  userId                String?
+  view                  Int?
+}
+
+type BackupApplyLoanApplyLoanDoc {
+  id                 String   @map("_id")
+  address            String?
+  bankId             String?
+  countryId          String?
+  createdAt          DateTime @db.Date
+  createdUser        String
+  currencyCode       String?
+  date               String?
+  districtId         String?
+  locationId         String?
+  name               String
+  note               String?
+  nrcNo              String?
+  participatePercent Int?
+  phoneNumber        String?
+  price              Int
+  propertyId         String?
+  purposeId          String?
+  term               Int?
+}
+
+type BackupPropertyPropertyDoc {
+  id                String                                @map("_id")
+  actualPrice       Int?
+  additional        String[]
+  address           String?
+  clientId          String?
+  code              String
+  commissionFee     Int?
+  countryCode       String
+  createdAt         DateTime                              @db.Date
+  createdUser       String
+  currencyCode      String
+  currencySymbol    String
+  /// Multiple data types found: Float: 4.2%, Int: 95.8% out of 168 sampled entries
+  depth             Json?
+  desc              String?
+  dimension         String
+  districtId        String
+  fbPost_id         String?
+  firstCreatedAt    DateTime?                             @db.Date
+  geolocation       BackupPropertyPropertyDocGeolocation?
+  groupType         String
+  isMarker          Boolean?
+  /// Multiple data types found: Float: 2.9%, Int: 97.1% out of 137 sampled entries
+  lastPrice         Json?
+  linkYoutube       String?
+  locationId        String
+  nearBy            BackupPropertyPropertyDocNearBy[]
+  numBathroom       Int?
+  numBed            Int?
+  numFav            Int
+  numRenew          Int
+  phoneNumberPrefix String
+  position          BackupPropertyPropertyDocPosition
+  /// Multiple data types found: Float: 2.6%, Int: 97.4% out of 194 sampled entries
+  price             Json
+  /// Multiple data types found: Float: 73.2%, Int: 26.8% out of 194 sampled entries
+  pricePerSquare    Json
+  priceShort        String
+  propertyStatus    String
+  shareUrl          String
+  /// Multiple data types found: Float: 12.9%, Int: 87.1% out of 194 sampled entries
+  size              Json
+  status            String
+  title             String
+  titleType         String?
+  type              String
+  updatedAt         DateTime?                             @db.Date
+  updatedUser       String?
+  /// Multiple data types found: Array(String): 99.5%, Array(Unknown): 0.5% out of 194 sampled entries
+  urlList           Json?
+  view              Int
+  /// Multiple data types found: Float: 19%, Int: 81% out of 168 sampled entries
+  width             Json?
+}
+
+type BackupPropertyPropertyDocGeolocation {
+  coordinates Float[]
+  type        String
+}
+
+type BackupPropertyPropertyDocNearBy {
+  /// Multiple data types found: Float: 96.8%, Int: 3.2% out of 1584 sampled entries
+  distance Json
+  place    String
+}
+
+type BackupPropertyPropertyDocPosition {
+  /// Multiple data types found: Float: 99%, Int: 1% out of 194 sampled entries
+  lat Json
+  /// Multiple data types found: Float: 99%, Int: 1% out of 194 sampled entries
+  lng Json
+}
+
+type BackupUserUserDoc {
+  id                 String                    @map("_id")
+  agencyId           String?
+  agentId            String?
+  bio                String?
+  branch             String[]
+  coverUrl           String?
+  createdAt          DateTime                  @db.Date
+  defaultBranch      String
+  developerId        String?
+  dob                String?
+  education          String?
+  email              String?
+  emails             BackupUserUserDocEmails[]
+  facebook           String?
+  facebookId         String?
+  followerCount      Int?
+  ipList             String[]
+  job_level          String?
+  locationId         String?
+  loginTokens        String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  notificationId     String?
+  occupation         String?
+  payment_qr_code    String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            BackupUserUserDocProfile
+  renewDate          String?
+  roles              String[]
+  segmentList        String[]
+  services           BackupUserUserDocServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  type               String?
+  url                String
+  userType           String?
+  username           String
+  verificationStatus String?
+  yearly_income      String?
+}
+
+type BackupUserUserDocEmails {
+  address  String
+  verified Boolean?
+}
+
+type BackupUserUserDocProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  name                   String?
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  url                    String?
+  userLogin              Int
+  workDayAfternoon       Int[]
+  workDayMorning         Int[]
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type BackupUserUserDocServices {
+  facebook BackupUserUserDocServicesFacebook?
+  google   BackupUserUserDocServicesGoogle?
+  password BackupUserUserDocServicesPassword?
+  resume   BackupUserUserDocServicesResume?
+}
+
+type BackupUserUserDocServicesFacebook {
+  accessToken String?
+  email       String?
+  /// Multiple data types found: Float: 9.1%, Int: 90.9% out of 11 sampled entries
+  expiresAt   Json?
+  first_name  String?
+  id          String?
+  last_name   String?
+  name        String?
+  name_format String?
+  picture     BackupUserUserDocServicesFacebookPicture?
+  short_name  String?
+}
+
+type BackupUserUserDocServicesFacebookPicture {
+  data BackupUserUserDocServicesFacebookPictureData
+}
+
+type BackupUserUserDocServicesFacebookPictureData {
+  height        Int
+  is_silhouette Boolean
+  url           String
+  width         Int
+}
+
+type BackupUserUserDocServicesGoogle {
+  accessToken    String?
+  email          String?
+  /// Multiple data types found: String: 6.7%, Int: 93.3% out of 15 sampled entries
+  expiresAt      Json?
+  id             String?
+  picture        String?
+  scope          String[]
+  verified_email Boolean?
+}
+
+type BackupUserUserDocServicesPassword {
+  bcrypt String
+}
+
+type BackupUserUserDocServicesResume {
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  loginTokens Json?
+}
+
+type BackupWantedWantedDoc {
+  id            String    @map("_id")
+  contactNumber String
+  countryId     String
+  createdAt     DateTime  @db.Date
+  createdUser   String
+  description   String
+  districtId    String?
+  groupType     String
+  locationId    String?
+  maxPrice      Int
+  minPrice      Int
+  status        Boolean
+  type          String
+  updatedAt     DateTime? @db.Date
+  updatedUser   String?
+}
+
+type BranchAuditData {
+  id                    String                         @map("_id")
+  address               String?
+  /// Multiple data types found: BranchAuditDataAgencyTypeDoc: 68.4%, Array(BranchAuditDataAgencyTypeDoc): 31.6% out of 38 sampled entries
+  agencyTypeDoc         Json?
+  agentType             String?
+  approvedAt            DateTime?                      @db.Date
+  associationDoc        BranchAuditDataAssociationDoc?
+  associationId         String?
+  associationMemberCode String?
+  branchId              String?
+  certificate           String?
+  certificateNumber     String?
+  certificateType       String?
+  code                  String?
+  countryId             String?
+  createdAt             DateTime?                      @db.Date
+  createdUser           String?
+  description           String?
+  dob                   String?
+  email                 String?
+  enShortName           String?
+  facebook              String?
+  isRenew               String?
+  isRequestToVerify     Boolean?
+  locationId            String?
+  logo                  String?
+  name                  String
+  nationId              String?
+  phoneNumber           String?
+  photo                 String?
+  requestedAt           DateTime?                      @db.Date
+  salary                String?
+  sponsorId             String?
+  /// Multiple data types found: String: 1.5%, DateTime (Date): 98.5% out of 68 sampled entries
+  startDate             Json?
+  status                Boolean?
+  telegram              String?
+  /// Multiple data types found: String: 60.1%, Array(String): 39.9% out of 193 sampled entries
+  type                  Json?
+  upLineId              String?
+  updatedAt             DateTime?                      @db.Date
+  updatedUser           String?
+  userDoc               BranchAuditDataUserDoc?
+  verificationStatus    String?
+  youtubeLink           String?
+}
+
+type BranchAuditDataAgencyTypeDoc {
+  id          String    @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String?
+  name        String
+  status      Boolean
+  typeId      String?
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type BranchAuditDataAssociationDoc {
+  id          String   @map("_id")
+  countryId   String
+  createdAt   DateTime @db.Date
+  createdUser String
+  description String
+  logo        String
+  name        String
+  shortName   String
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+type BranchAuditDataUserDoc {
+  id                 String                         @map("_id")
+  agencyId           String
+  agentId            String
+  branch             String[]
+  createdAt          DateTime                       @db.Date
+  defaultBranch      String
+  developerId        String?
+  dob                String?
+  education          String?
+  email              String
+  emails             BranchAuditDataUserDocEmails[]
+  facebook           String?
+  followerCount      Int?
+  ipList             String[]
+  job_level          String?
+  loginTokens        String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  notificationId     String?
+  occupation         String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            BranchAuditDataUserDocProfile
+  renewDate          String?
+  roles              String[]
+  segmentList        String[]
+  services           BranchAuditDataUserDocServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  type               String?
+  url                String
+  userType           String
+  username           String
+  verificationStatus String?
+  yearly_income      String?
+}
+
+type BranchAuditDataUserDocEmails {
+  address  String
+  verified Boolean
+}
+
+type BranchAuditDataUserDocProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  url                    String?
+  userLogin              Int
+  workDayAfternoon       Int[]
+  workDayMorning         Int[]
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type BranchAuditDataUserDocServices {
+  facebook BranchAuditDataUserDocServicesFacebook?
+  google   BranchAuditDataUserDocServicesGoogle?
+  password BranchAuditDataUserDocServicesPassword
+  resume   BranchAuditDataUserDocServicesResume?
+}
+
+type BranchAuditDataUserDocServicesFacebook {
+  accessToken String?
+  email       String?
+  expiresAt   Int?
+  first_name  String?
+  id          String?
+  last_name   String?
+  name        String?
+  name_format String?
+  picture     BranchAuditDataUserDocServicesFacebookPicture?
+  short_name  String?
+}
+
+type BranchAuditDataUserDocServicesFacebookPicture {
+  data BranchAuditDataUserDocServicesFacebookPictureData
+}
+
+type BranchAuditDataUserDocServicesFacebookPictureData {
+  height        Int
+  is_silhouette Boolean
+  url           String
+  width         Int
+}
+
+type BranchAuditDataUserDocServicesGoogle {
+  accessToken    String?
+  email          String?
+  expiresAt      Int?
+  id             String?
+  picture        String?
+  scope          String[]
+  verified_email Boolean?
+}
+
+type BranchAuditDataUserDocServicesPassword {
+  bcrypt String
+}
+
+type BranchAuditDataUserDocServicesResume {
+  loginTokens BranchAuditDataUserDocServicesResumeLoginTokens[]
+}
+
+type BranchAuditDataUserDocServicesResumeLoginTokens {
+  hashedToken String
+  when        DateTime @db.Date
+}
+
+type ExchangeRates {
+  CNY Float
+  KHR Int
+  THB Int
+  USD Int
+}
+
+type RefAgencyTypeAuditData {
+  id          String    @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String?
+  name        String
+  status      Boolean
+  typeId      String?
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type RefDistrictAuditData {
+  id          String    @map("_id")
+  countryId   String
+  createdAt   DateTime? @db.Date
+  createdUser String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  description Json?
+  khName      String
+  locationId  String
+  name        String
+  status      Boolean?
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type RefLocationAuditData {
+  id          String    @map("_id")
+  countryId   String?
+  createdAt   DateTime? @db.Date
+  createdUser String?
+  khName      String
+  name        String
+  status      Boolean
+}
+
+type RefPropertyTypeAuditData {
+  id          String    @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  description Json?
+  language    String
+  name        String
+  nativeName  String
+  status      Boolean
+  type        String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbAdvertiseAuditData {
+  id          String                           @map("_id")
+  agencyDoc   SbAdvertiseAuditDataAgencyDoc?
+  agencyId    String?
+  agentDoc    SbAdvertiseAuditDataAgentDoc?
+  agentId     String?
+  count       Int?
+  countryCode String
+  createdAt   DateTime                         @db.Date
+  createdUser String?
+  expiredDate String
+  locationDoc SbAdvertiseAuditDataLocationDoc?
+  propertyDoc SbAdvertiseAuditDataPropertyDoc?
+  propertyId  String?
+  startDate   String
+  updatedAt   DateTime?                        @db.Date
+  updatedUser String?
+  userDoc     SbAdvertiseAuditDataUserDoc?
+}
+
+type SbAdvertiseAuditDataAgencyDoc {
+  id            String    @map("_id")
+  address       String?
+  associationId String?
+  code          String
+  countryId     String
+  createdAt     DateTime  @db.Date
+  createdUser   String?
+  description   String?
+  email         String?
+  enShortName   String
+  facebook      String?
+  isRenew       String?
+  locationId    String?
+  logo          String
+  name          String
+  phoneNumber   String
+  startDate     DateTime? @db.Date
+  status        Boolean?
+  /// Multiple data types found: String: 25%, Array(String): 75% out of 8 sampled entries
+  type          Json
+  updatedAt     DateTime  @db.Date
+  updatedUser   String?
+}
+
+type SbAdvertiseAuditDataAgentDoc {
+  id                    String    @map("_id")
+  address               String?
+  agentType             String
+  approvedAt            DateTime? @db.Date
+  associationId         String?
+  associationMemberCode String?
+  branchId              String?
+  certificate           String?
+  certificateNumber     String?
+  certificateType       String?
+  countryId             String
+  createdAt             DateTime  @db.Date
+  createdUser           String?
+  description           String?
+  dob                   String?
+  email                 String?
+  facebook              String?
+  heart                 Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  heartedUsers          Json?
+  isFormal              Boolean?
+  isRenew               String?
+  isRequestToVerify     Boolean?
+  license               String?
+  locationId            String?
+  memberCode            String
+  name                  String
+  phoneNumber           String
+  photo                 String?
+  requestedAt           DateTime? @db.Date
+  startDate             String?
+  status                Boolean
+  telegram              String?
+  totalAuto             Int?
+  totalProperty         Int?
+  type                  String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  upLineListId          Json?
+  updatedAt             DateTime? @db.Date
+  updatedUser           String?
+  userId                String?
+  verificationStatus    String?
+  view                  Int?
+}
+
+type SbAdvertiseAuditDataLocationDoc {
+  id          String    @map("_id")
+  countryId   String
+  khName      String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbAdvertiseAuditDataPropertyDoc {
+  id                String                                  @map("_id")
+  additional        String[]
+  address           String
+  clientId          String?
+  code              String
+  commissionFee     Int?
+  countryCode       String
+  createdAt         DateTime                                @db.Date
+  createdUser       String
+  currencyCode      String
+  currencySymbol    String?
+  /// Multiple data types found: Float: 6.7%, Int: 93.3% out of 104 sampled entries
+  depth             Json?
+  desc              String?
+  dimension         String?
+  districtId        String?
+  fbPost_id         String?
+  firstCreatedAt    DateTime?                               @db.Date
+  groupType         String
+  isMarker          Boolean?
+  lastPrice         Int?
+  linkYoutube       String?
+  locationId        String
+  nearBy            SbAdvertiseAuditDataPropertyDocNearBy[]
+  numBathroom       Int?
+  numBed            Int?
+  numFav            Int
+  numRenew          Int?
+  phoneNumberPrefix String
+  position          SbAdvertiseAuditDataPropertyDocPosition
+  /// Multiple data types found: Float: 1%, Int: 99% out of 105 sampled entries
+  price             Json
+  /// Multiple data types found: Float: 84.6%, Int: 15.4% out of 104 sampled entries
+  pricePerSquare    Json?
+  priceShort        String?
+  propertyStatus    String?
+  shareUrl          String
+  /// Multiple data types found: Float: 8.6%, Int: 91.4% out of 105 sampled entries
+  size              Json
+  status            String
+  title             String
+  titleType         String?
+  type              String
+  updatedAt         DateTime                                @db.Date
+  updatedUser       String?
+  url1              String?
+  url2              String?
+  url3              String?
+  url4              String?
+  url5              String?
+  url6              String?
+  urlList           String[]
+  view              Int
+  /// Multiple data types found: Float: 10.6%, Int: 89.4% out of 104 sampled entries
+  width             Json?
+}
+
+type SbAdvertiseAuditDataPropertyDocNearBy {
+  /// Multiple data types found: Float: 96.7%, Int: 3.3% out of 60 sampled entries
+  distance Json
+  place    String
+}
+
+type SbAdvertiseAuditDataPropertyDocPosition {
+  lat Float
+  lng Float
+}
+
+type SbAdvertiseAuditDataUserDoc {
+  id                 String                              @map("_id")
+  agencyId           String?
+  agentId            String?
+  branch             String[]
+  createdAt          DateTime                            @db.Date
+  defaultBranch      String
+  developerId        String?
+  dob                String?
+  education          String?
+  email              String
+  emails             SbAdvertiseAuditDataUserDocEmails[]
+  facebook           String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  ipList             Json?
+  job_level          String?
+  loginTokens        String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  notificationId     String?
+  occupation         String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            SbAdvertiseAuditDataUserDocProfile
+  renewDate          String?
+  roles              String[]
+  segmentList        String[]
+  services           SbAdvertiseAuditDataUserDocServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  totalRenew         Int?
+  type               String?
+  url                String
+  userType           String?
+  username           String
+  verificationStatus String?
+  yearly_income      String?
+}
+
+type SbAdvertiseAuditDataUserDocEmails {
+  address  String
+  verified Boolean
+}
+
+type SbAdvertiseAuditDataUserDocProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  url                    String?
+  userLogin              Int
+  workDayAfternoon       Int[]
+  workDayMorning         Int[]
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type SbAdvertiseAuditDataUserDocServices {
+  facebook SbAdvertiseAuditDataUserDocServicesFacebook?
+  google   SbAdvertiseAuditDataUserDocServicesGoogle?
+  password SbAdvertiseAuditDataUserDocServicesPassword
+  resume   SbAdvertiseAuditDataUserDocServicesResume?
+}
+
+type SbAdvertiseAuditDataUserDocServicesFacebook {
+  accessToken String?
+  email       String?
+  expiresAt   Int?
+  first_name  String?
+  id          String?
+  last_name   String?
+  name        String?
+  name_format String?
+  picture     SbAdvertiseAuditDataUserDocServicesFacebookPicture?
+  short_name  String?
+}
+
+type SbAdvertiseAuditDataUserDocServicesFacebookPicture {
+  data SbAdvertiseAuditDataUserDocServicesFacebookPictureData
+}
+
+type SbAdvertiseAuditDataUserDocServicesFacebookPictureData {
+  height        Int
+  is_silhouette Boolean
+  url           String
+  width         Int
+}
+
+type SbAdvertiseAuditDataUserDocServicesGoogle {
+  accessToken    String?
+  email          String?
+  expiresAt      Int?
+  id             String?
+  picture        String?
+  scope          String[]
+  verified_email Boolean?
+}
+
+type SbAdvertiseAuditDataUserDocServicesPassword {
+  bcrypt String
+}
+
+type SbAdvertiseAuditDataUserDocServicesResume {
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  loginTokens Json?
+}
+
+type SbAgentAuditData {
+  id                    String                          @map("_id")
+  address               String?
+  agentType             String
+  approvedAt            DateTime?                       @db.Date
+  associationDoc        SbAgentAuditDataAssociationDoc?
+  associationId         String?
+  associationMemberCode String?
+  branchId              String?
+  certificate           String?
+  certificateNumber     String?
+  certificateType       String?
+  countryId             String?
+  createdAt             DateTime                        @db.Date
+  createdUser           String?
+  description           String?
+  dob                   String?
+  email                 String?
+  expiredDate           String?
+  facebook              String?
+  heart                 Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  heartedUsers          Json?
+  isFormal              Boolean?
+  isRenew               String?
+  isRequestToVerify     Boolean?
+  license               String?
+  locationId            String?
+  memberCode            String
+  name                  String
+  phoneNumber           String
+  photo                 String?
+  requestedAt           DateTime?                       @db.Date
+  startDate             String?
+  status                Boolean
+  telegram              String?
+  totalAuto             Int?
+  totalProperty         Int?
+  type                  String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  upLineListId          Json?
+  updatedAt             DateTime?                       @db.Date
+  updatedUser           String?
+  userId                String?
+  verificationStatus    String?
+  view                  Int?
+}
+
+type SbAgentAuditDataAssociationDoc {
+  id          String   @map("_id")
+  countryId   String
+  createdAt   DateTime @db.Date
+  createdUser String
+  description String
+  name        String
+  shortName   String
+}
+
+type SbAgentGroupAuditData {
+  id           String                            @map("_id")
+  commission   SbAgentGroupAuditDataCommission[]
+  countryId    String
+  createdAt    DateTime                          @db.Date
+  createdUser  String
+  groupNumber  String
+  isShareGroup Boolean
+  locationId   String
+  name         String
+  status       Boolean
+}
+
+type SbAgentGroupAuditDataCommission {
+  fee          SbAgentGroupAuditDataCommissionFee
+  propertyType String
+}
+
+type SbAgentGroupAuditDataCommissionFee {
+  shareCommissionFee   Int
+  succeedCommissionFee Int
+  totalCommissionFee   Int
+}
+
+type SbAgentGroupCommission {
+  fee          SbAgentGroupCommissionFee
+  propertyType String
+}
+
+type SbAgentGroupCommissionFee {
+  /// Multiple data types found: Float: 6.3%, Int: 93.8% out of 48 sampled entries
+  shareCommissionFee   Json
+  /// Multiple data types found: Float: 6.3%, Int: 93.8% out of 48 sampled entries
+  succeedCommissionFee Json
+  totalCommissionFee   Int
+}
+
+type SbAgentMemberGroupAuditData {
+  id                         String                              @map("_id")
+  actualShareCommissionFee   Int?
+  actualSucceedCommissionFee Int?
+  actualTotalCommissionFee   Int?
+  agentDoc                   SbAgentMemberGroupAuditDataAgentDoc
+  createdAt                  DateTime                            @db.Date
+  createdUser                String
+  shareCommissionFee         Int?
+  status                     Boolean
+  succeedCommissionFee       Int?
+  totalActualPrice           Int?
+  totalCommissionFee         Int?
+  totalDepositPrice          Int?
+  totalPrice                 Int
+  userId                     String
+}
+
+type SbAgentMemberGroupAuditDataAgentDoc {
+  id            String   @map("_id")
+  address       String?
+  agentType     String
+  countryId     String
+  createdAt     DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser   Json?
+  isFormal      Boolean?
+  locationId    String?
+  memberCode    String
+  name          String
+  phoneNumber   String
+  startDate     String?
+  status        Boolean
+  totalProperty Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  upLineListId  Json?
+}
+
+type SbAnnouncementAuditData {
+  id            String    @map("_id")
+  body          String
+  countryCode   String
+  createdAt     DateTime  @db.Date
+  createdUser   String
+  endDate       String
+  endMonthDay   String
+  startDate     String
+  startMonthDay String
+  title         String
+  updatedAt     DateTime? @db.Date
+  updatedUser   String?
+}
+
+type SbApplyLoanAuditData {
+  id                 String   @map("_id")
+  address            String
+  createdAt          DateTime @db.Date
+  createdUser        String
+  date               String
+  name               String
+  note               String
+  participatePercent Int
+  phoneNumber        String
+  price              Int
+  term               Int
+}
+
+type SbAppointmentAuditData {
+  id          String    @map("_id")
+  branchId    String?
+  color       String
+  createdAt   DateTime  @db.Date
+  createdUser String
+  date        String
+  details     String?
+  end         Float
+  id_         String?   @map("id")
+  name        String
+  start       Float
+  timed       Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+  userId      String
+}
+
+type SbBusinessTypeAuditData {
+  id          String    @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  name        String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbCategoryAuditData {
+  id          String   @map("_id")
+  code        String
+  createdAt   DateTime @db.Date
+  createdUser String
+  name        String
+  status      Boolean
+}
+
+type SbClientAuditData {
+  id                String    @map("_id")
+  address           String?
+  branchId          String?
+  clientType        String?
+  createdAt         DateTime  @db.Date
+  createdUser       String
+  districtId        String?
+  dob               String?
+  email             String?
+  groupNumber       String?
+  homeNumber        String?
+  loanCycle         Int
+  locationId        String?
+  name              String
+  nationId          String?
+  note              String?
+  openingBalance    Int
+  order             Int
+  phoneNumber       String?
+  phoneNumberPrefix String?
+  type              String?
+  updatedAt         DateTime? @db.Date
+  updatedUser       String?
+}
+
+type SbFavoriteAuditData {
+  autoId     String?
+  propertyId String
+  type       String?
+  userId     String
+}
+
+type SbHomeAuditData {
+  id           String    @map("_id")
+  body         String
+  buttonName   String?
+  category     String?
+  countryCode  String?
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  externalLink String?
+  sizePhoto    String?
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+  url          String?
+  videoLink    String?
+}
+
+type SbMeasuringAreaAuditData {
+  id                    String                                          @map("_id")
+  /// Multiple data types found: Float: 92.7%, Int: 7.3% out of 150 sampled entries
+  area                  Json
+  createdAt             DateTime                                        @db.Date
+  createdUser           String
+  initialCameraPosition SbMeasuringAreaAuditDataInitialCameraPosition[]
+  latLng                SbMeasuringAreaAuditDataLatLng[]
+  name                  String
+  staticMapUrl          String
+  userId                String
+  /// Multiple data types found: Float: 90.7%, Int: 9.3% out of 150 sampled entries
+  zoomLevel             Json
+}
+
+type SbMeasuringAreaAuditDataInitialCameraPosition {
+  lat Float
+  lng Float
+}
+
+type SbMeasuringAreaAuditDataLatLng {
+  lat Float
+  lng Float
+}
+
+type SbMeasuringAreaInitialCameraPosition {
+  lat Float
+  lng Float
+}
+
+type SbMeasuringAreaLatLng {
+  lat Float
+  lng Float
+}
+
+type SbNotificationAuditData {
+  id           String    @map("_id")
+  body         String
+  countryCode  String?
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  externalLink String?
+  title        String
+  type         String?
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+  url          String?
+  videoLink    String?
+}
+
+type SbPlanAuditData {
+  id                  String?                      @map("_id")
+  advertiseNote       String?
+  description         String
+  name                String
+  numAgent            Int?
+  numDocument         Int?
+  numMeasurement      Int?
+  numProperty         Int?
+  numRenew            Int?
+  order               Int?
+  planCountry         SbPlanAuditDataPlanCountry[]
+  /// Multiple data types found: Float: 1.4%, Int: 98.6% out of 74 sampled entries
+  price               Json?
+  pricePerAdvertise   Int?
+  /// Multiple data types found: Float: 70.6%, Int: 29.4% out of 17 sampled entries
+  pricePerMeasurement Json?
+  pricePerPost        Int?
+  pricePerRenew       Int?
+  status              Boolean
+  updatedAt           DateTime?                    @db.Date
+  updatedUser         String?
+}
+
+type SbPlanAuditDataPlanCountry {
+  countryCode         String
+  numAgent            Int
+  numAuto             Int?
+  numDocument         Int
+  numFileSocialPost   Int?
+  numMeasurement      Int
+  numProperty         Int
+  numRenew            Int
+  numSocialPost       Int?
+  price               Int
+  pricePerAdvertise   Int
+  pricePerMeasurement Float
+  pricePerPost        Int
+  pricePerRenew       Int
+  pricePerValuation   Int
+}
+
+type SbPlanPlanCountry {
+  countryCode         String
+  numAgent            Int
+  numAuto             Int
+  numDocument         Int
+  numFileSocialPost   Int?
+  numMeasurement      Int
+  numProperty         Int
+  numRenew            Int
+  numSocialPost       Int?
+  price               Int
+  pricePerAdvertise   Int
+  pricePerMeasurement Float
+  pricePerPost        Int
+  pricePerRenew       Int
+  pricePerValuation   Int
+}
+
+type SbProjectAuditData {
+  id          String    @map("_id")
+  countryId   String?
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String
+  location    String
+  name        String
+  numberUnit  Int?
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+  url         String[]
+  videoLink   String?
+}
+
+type SbPropertyAuditData {
+  id                String                          @map("_id")
+  actualPrice       Int?
+  additional        String[]
+  address           String
+  branchId          String?
+  clientId          String?
+  code              String
+  /// Multiple data types found: Float: 0.2%, Int: 99.8% out of 660 sampled entries
+  commissionFee     Json?
+  countryCode       String
+  createdAt         DateTime                        @db.Date
+  createdUser       String
+  currencyCode      String?
+  currencySymbol    String?
+  depositPrice      Int?
+  /// Multiple data types found: Float: 6%, Int: 94% out of 778 sampled entries
+  depth             Json?
+  desc              String?
+  dimension         String?
+  districtDoc       SbPropertyAuditDataDistrictDoc?
+  districtId        String?
+  fbPost_id         String?
+  firstCreatedAt    DateTime?                       @db.Date
+  geolocation       SbPropertyAuditDataGeolocation?
+  groupType         String?
+  isMarker          Boolean?
+  lastPrice         Int?
+  linkYoutube       String?
+  locationDoc       SbPropertyAuditDataLocationDoc?
+  locationId        String
+  nearBy            SbPropertyAuditDataNearBy[]
+  numBathroom       Int?
+  numBed            Int?
+  numFav            Int?
+  numRenew          Int?
+  phoneNumberPrefix String
+  position          SbPropertyAuditDataPosition
+  /// Multiple data types found: Float: 0.3%, Int: 99.7% out of 1000 sampled entries
+  price             Json
+  /// Multiple data types found: Float: 76.6%, Int: 23.4% out of 993 sampled entries
+  pricePerSquare    Json?
+  /// Multiple data types found: String: 99.9%, Int: 0.1% out of 994 sampled entries
+  priceShort        Json?
+  projectId         String?
+  propertyStatus    String?
+  shareUrl          String?
+  /// Multiple data types found: Float: 11.2%, Int: 88.8% out of 1000 sampled entries
+  size              Json
+  status            String
+  title             String
+  titleType         String?
+  type              String
+  updatedAt         DateTime?                       @db.Date
+  updatedUser       String?
+  url1              String?
+  url2              String?
+  url3              String?
+  url4              String?
+  url5              String?
+  /// Multiple data types found: Array(String): 99.7%, Array(Unknown): 0.3% out of 998 sampled entries
+  urlList           Json?
+  userDoc           SbPropertyAuditDataUserDoc?
+  view              Int
+  /// Multiple data types found: Float: 16.3%, Int: 83.7% out of 778 sampled entries
+  width             Json?
+}
+
+type SbPropertyAuditDataDistrictDoc {
+  id          String    @map("_id")
+  countryId   String
+  createdAt   DateTime? @db.Date
+  createdUser String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  description Json?
+  khName      String
+  locationId  String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbPropertyAuditDataGeolocation {
+  coordinates Float[]
+  type        String
+}
+
+type SbPropertyAuditDataLocationDoc {
+  id          String    @map("_id")
+  countryId   String
+  khName      String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbPropertyAuditDataNearBy {
+  /// Multiple data types found: Float: 98.1%, Int: 1.9% out of 6940 sampled entries
+  distance Json
+  place    String
+}
+
+type SbPropertyAuditDataPosition {
+  /// Multiple data types found: Float: 99.6%, Int: 0.4% out of 1000 sampled entries
+  lat Json
+  /// Multiple data types found: Float: 99.6%, Int: 0.4% out of 1000 sampled entries
+  lng Json
+}
+
+type SbPropertyAuditDataUserDoc {
+  id                 String                             @map("_id")
+  agencyId           String?
+  agentId            String?
+  bio                String?
+  branch             String[]
+  coverUrl           String?
+  createdAt          DateTime                           @db.Date
+  defaultBranch      String
+  developerId        String?
+  dob                String?
+  education          String?
+  email              String?
+  /// Multiple data types found: String: 25%, Array(SbPropertyAuditDataUserDocEmails): 75% out of 4 sampled entries
+  emails             Json?
+  facebook           String?
+  followerCount      Int?
+  ipList             String[]
+  job_level          String?
+  locationId         String?
+  loginTokens        String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  notificationId     String?
+  occupation         String?
+  payment_qr_code    String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            SbPropertyAuditDataUserDocProfile
+  renewDate          String?
+  roles              String[]
+  segmentList        String[]
+  services           SbPropertyAuditDataUserDocServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  totalRenew         Int?
+  type               String?
+  url                String
+  userType           String?
+  username           String
+  verificationStatus String?
+  yearly_income      String?
+}
+
+type SbPropertyAuditDataUserDocEmails {
+  address  String
+  verified Boolean
+}
+
+type SbPropertyAuditDataUserDocProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  userLogin              Int
+  workDayAfternoon       Int[]
+  workDayMorning         Int[]
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type SbPropertyAuditDataUserDocServices {
+  facebook SbPropertyAuditDataUserDocServicesFacebook?
+  google   SbPropertyAuditDataUserDocServicesGoogle?
+  password SbPropertyAuditDataUserDocServicesPassword
+  resume   SbPropertyAuditDataUserDocServicesResume?
+}
+
+type SbPropertyAuditDataUserDocServicesFacebook {
+  accessToken String?
+  email       String?
+  expiresAt   Int?
+  first_name  String?
+  id          String?
+  last_name   String?
+  name        String?
+  name_format String?
+  picture     SbPropertyAuditDataUserDocServicesFacebookPicture?
+  short_name  String?
+}
+
+type SbPropertyAuditDataUserDocServicesFacebookPicture {
+  data SbPropertyAuditDataUserDocServicesFacebookPictureData
+}
+
+type SbPropertyAuditDataUserDocServicesFacebookPictureData {
+  height        Int
+  is_silhouette Boolean
+  url           String
+  width         Int
+}
+
+type SbPropertyAuditDataUserDocServicesGoogle {
+  accessToken    String?
+  email          String?
+  expiresAt      Int?
+  id             String?
+  picture        String?
+  scope          String[]
+  verified_email Boolean?
+}
+
+type SbPropertyAuditDataUserDocServicesPassword {
+  bcrypt String
+}
+
+type SbPropertyAuditDataUserDocServicesResume {
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  loginTokens Json?
+}
+
+type SbPropertyGeolocation {
+  /// Multiple data types found: Array(Float): 99.8%, Array(Int): 0.2% out of 1000 sampled entries
+  coordinates Json
+  type        String
+}
+
+type SbPropertyNearBy {
+  /// Multiple data types found: Float: 98.4%, Int: 1.6% out of 7643 sampled entries
+  distance Json
+  place    String
+}
+
+type SbPropertyPosition {
+  /// Multiple data types found: Float: 99.8%, Int: 0.2% out of 1000 sampled entries
+  lat Json
+  /// Multiple data types found: Float: 99.8%, Int: 0.2% out of 1000 sampled entries
+  lng Json
+}
+
+type SbPropertyValuateAuditData {
+  id                 String   @map("_id")
+  createdAt          DateTime @db.Date
+  isExternalProperty Boolean
+  name               String
+  paymentId          String
+  phoneNumber        String
+  propertyId         String
+  userId             String
+  valuationStatus    String
+  valuator           String
+}
+
+type SbPropertyValuateExternalPropertyDoc {
+  address      String
+  propertyType String
+}
+
+type SbUnitAuditData {
+  id          String    @map("_id")
+  code        String
+  createdAt   DateTime  @db.Date
+  createdUser String
+  name        String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbUserDocumentAuditData {
+  id          String    @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  name        String
+  updatedAt   DateTime? @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+  url         String
+  userId      String
+}
+
+type SbUserPaymentAgentDoc {
+  address     String?
+  agentType   String?
+  branchId    String?
+  countryId   String?
+  description String?
+  dob         String?
+  email       String?
+  facebook    String?
+  locationId  String?
+  name        String?
+  nationId    String?
+  phoneNumber String?
+  photo       String?
+  salary      String?
+  sponsorId   String?
+  startDate   String?
+  status      Boolean?
+  telegram    String?
+  type        String?
+  upLineId    String?
+}
+
+type SbUserPaymentExternalPropertyDoc {
+  address      String?
+  countryId    String?
+  districtId   String?
+  locationId   String?
+  propertyType String?
+  type         String?
+}
+
+type SbWantedAuditData {
+  id            String                        @map("_id")
+  contactNumber String
+  countryId     String?
+  createdAt     DateTime                      @db.Date
+  createdUser   String?
+  description   String?
+  districtDoc   SbWantedAuditDataDistrictDoc?
+  districtId    String?
+  groupType     String
+  locationDoc   SbWantedAuditDataLocationDoc?
+  locationId    String?
+  maxPrice      Int
+  minPrice      Int
+  status        Boolean
+  type          String
+  updatedAt     DateTime?                     @db.Date
+  updatedUser   String?
+}
+
+type SbWantedAuditDataDistrictDoc {
+  id          String    @map("_id")
+  countryId   String
+  createdAt   DateTime? @db.Date
+  createdUser String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  description Json?
+  khName      String
+  locationId  String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type SbWantedAuditDataLocationDoc {
+  id          String    @map("_id")
+  countryId   String
+  khName      String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+type ScAudiosAuditData {
+  id           String   @map("_id")
+  audioLink    String
+  category     String?
+  commentCount Int
+  createdAt    DateTime @db.Date
+  createdUser  String
+  duration     Int
+  likeCount    Int
+  shareCount   Int
+  status       Boolean
+  title        String?
+  viewCount    Int
+}
+
+type ScPostsAuditData {
+  id            String    @map("_id")
+  commentCount  Int
+  countryId     String
+  createdAt     DateTime  @db.Date
+  createdUser   String
+  description   String?
+  isObjective   Boolean?
+  likeCount     Int
+  link          String?
+  objectiveType String?
+  /// Multiple data types found: Array(String): 94%, Array(Unknown): 6% out of 865 sampled entries
+  photos        Json?
+  price         Int?
+  shareCount    Int
+  status        Boolean
+  type          String
+  updatedAt     DateTime? @db.Date
+  videos        String[]
+  viewCount     Int
+}
+
+type ScVideosAuditData {
+  id           String    @map("_id")
+  category     String
+  commentCount Int
+  coverImage   String?
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  description  String
+  likeCount    Int
+  shareCount   Int
+  status       Boolean
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+  videoLink    String
+  viewCount    Int
+}
+
+type UserActionsSearchDoc {
+  countryCode String
+  districtId  String?
+  groupType   String?
+  locationId  String?
+  maxPrice    String?
+  minPrice    String?
+  type        String?
+}
+
+type UserAuditData {
+  id                 String                @map("_id")
+  agencyId           String?
+  agentId            String?
+  bio                String?
+  branch             String[]
+  coverUrl           String?
+  createdAt          DateTime              @db.Date
+  defaultBranch      String
+  developerId        String?
+  dob                String?
+  education          String?
+  email              String
+  emails             UserAuditDataEmails[]
+  facebook           String?
+  followerCount      Int?
+  ipList             String[]
+  job_level          String?
+  locationId         String?
+  loginTokens        String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  notificationId     String?
+  occupation         String?
+  payment_qr_code    String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            UserAuditDataProfile
+  renewDate          String?
+  roles              String[]
+  segmentList        String[]
+  services           UserAuditDataServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  totalRenew         Int?
+  type               String?
+  url                String
+  userType           String?
+  username           String
+  verificationStatus String?
+  yearly_income      String?
+}
+
+type UserAuditDataEmails {
+  address  String
+  verified Boolean
+}
+
+type UserAuditDataProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  url                    String?
+  userLogin              Int
+  workDayAfternoon       Int[]
+  workDayMorning         Int[]
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type UserAuditDataServices {
+  facebook UserAuditDataServicesFacebook?
+  google   UserAuditDataServicesGoogle?
+  password UserAuditDataServicesPassword?
+  resume   UserAuditDataServicesResume?
+}
+
+type UserAuditDataServicesFacebook {
+  accessToken String?
+  email       String?
+  expiresAt   Int?
+  first_name  String?
+  id          String?
+  last_name   String?
+  name        String?
+  name_format String?
+  picture     UserAuditDataServicesFacebookPicture?
+  short_name  String?
+}
+
+type UserAuditDataServicesFacebookPicture {
+  data UserAuditDataServicesFacebookPictureData
+}
+
+type UserAuditDataServicesFacebookPictureData {
+  height        Int
+  is_silhouette Boolean
+  url           String
+  width         Int
+}
+
+type UserAuditDataServicesGoogle {
+  accessToken    String?
+  email          String?
+  expiresAt      Int?
+  id             String?
+  picture        String?
+  scope          String[]
+  verified_email Boolean?
+}
+
+type UserAuditDataServicesPassword {
+  bcrypt String
+}
+
+type UserAuditDataServicesResume {
+  loginTokens UserAuditDataServicesResumeLoginTokens[]
+}
+
+type UserAuditDataServicesResumeLoginTokens {
+  hashedToken String
+  when        DateTime @db.Date
+}
+
+type UsersEmails {
+  address  String
+  verified Boolean
+}
+
+type UsersProfile {
+  approved               Boolean
+  dense                  Boolean
+  fullName               String
+  imgBackground          Int
+  isDark                 Boolean
+  isSideBarImage         Boolean
+  language               String
+  maxUserLogin           Int
+  owner                  Boolean
+  phoneNumber            String?
+  sideColorFilter        Int
+  status                 Boolean?
+  url                    String?
+  userLogin              Int
+  workDayAfternoon       Int[]
+  workDayMorning         Int[]
+  workTimeAfternoonEnd   String
+  workTimeAfternoonStart String
+  workTimeMorningEnd     String
+  workTimeMorningStart   String
+}
+
+type UsersServices {
+  /// Field referred in an index, but found no data to define the type.
+  email    UsersServicesEmail?
+  facebook UsersServicesFacebook
+  google   UsersServicesGoogle
+  password UsersServicesPassword
+  resume   UsersServicesResume
+}
+
+type UsersServicesEmail {
+  /// Field referred in an index, but found no data to define the type.
+  verificationTokens UsersServicesEmailVerificationTokens?
+}
+
+type UsersServicesEmailVerificationTokens {
+  /// Field referred in an index, but found no data to define the type.
+  token Json?
+}
+
+type UsersServicesFacebook {
+  accessToken String
+  email       String
+  /// Multiple data types found: Float: 8.3%, Int: 91.7% out of 60 sampled entries
+  expiresAt   Json
+  first_name  String
+  id          String
+  last_name   String
+  name        String
+  name_format String
+  picture     UsersServicesFacebookPicture
+  short_name  String?
+}
+
+type UsersServicesFacebookPicture {
+  data UsersServicesFacebookPictureData
+}
+
+type UsersServicesFacebookPictureData {
+  /// Multiple data types found: Float: 8.3%, Int: 91.7% out of 60 sampled entries
+  height        Json
+  is_silhouette Boolean
+  url           String
+  /// Multiple data types found: Float: 8.3%, Int: 91.7% out of 60 sampled entries
+  width         Json
+}
+
+type UsersServicesGoogle {
+  accessToken    String
+  email          String
+  expiresAt      Int
+  id             String
+  picture        String
+  scope          String[]
+  verified_email Boolean
+}
+
+type UsersServicesPassword {
+  bcrypt String
+  /// Field referred in an index, but found no data to define the type.
+  enroll UsersServicesPasswordEnroll?
+  /// Field referred in an index, but found no data to define the type.
+  reset  UsersServicesPasswordReset?
+}
+
+type UsersServicesPasswordEnroll {
+  /// Field referred in an index, but found no data to define the type.
+  token Json?
+  /// Field referred in an index, but found no data to define the type.
+  when  Json?
+}
+
+type UsersServicesPasswordReset {
+  /// Field referred in an index, but found no data to define the type.
+  token Json?
+  /// Field referred in an index, but found no data to define the type.
+  when  Json?
+}
+
+type UsersServicesResume {
+  /// Field referred in an index, but found no data to define the type.
+  haveLoginTokensToDelete Json?
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  loginTokens             Json?
+}
+
+type UsersServicesResumeLoginTokens {
+  /// Field referred in an index, but found no data to define the type.
+  hashedToken Json?
+  /// Field referred in an index, but found no data to define the type.
+  token       Json?
+  /// Field referred in an index, but found no data to define the type.
+  when        Json?
+}
+
+type WebConfigAuditData {
+  id             String    @map("_id")
+  aboutDetail    String?
+  address        String?
+  createdAt      DateTime  @db.Date
+  createdUser    String
+  facebook       String?
+  footer         String?
+  instagram      String?
+  linkIn         String?
+  registerDetail String?
+  title          String?
+  twitter        String?
+  updatedAt      DateTime? @db.Date
+  updatedUser    String?
+}
+
+model aba_transaction {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  status      String
+  tran_id     String
+}
+
+model appstore_transaction {
+  id              String   @id @map("_id")
+  appStore_tranId String
+  createdAt       DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser     Json?
+  price           Float
+  product_id      String
+  status          String
+  tran_id         String
+}
+
+model association {
+  id          String    @id @map("_id")
+  countryId   String
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String
+  logo        String?
+  name        String
+  shortName   String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+
+  @@unique([name, shortName], map: "AssociationUnique")
+}
+
+model associationAudit {
+  id          String               @id @map("_id")
+  createdAt   DateTime             @db.Date
+  createdUser String
+  data        AssociationAuditData
+  type        String
+}
+
+model associationReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model au_auto {
+  id                String            @id @map("_id")
+  address           String?
+  autoBranch        String?
+  autoCondition     String
+  autoSubBranch     String?
+  autoType          String
+  bodyType          String?
+  branchId          String?
+  code              String
+  color             String?
+  /// Field referred in an index, but found no data to define the type.
+  compensationId    Json?
+  countryCode       String
+  createdAt         DateTime          @db.Date
+  createdUser       String
+  currencyCode      String
+  currencySymbol    String
+  desc              String?
+  districtId        String?
+  firstCreatedAt    DateTime          @db.Date
+  fuelType          String?
+  geolocation       AuAutoGeolocation
+  groupType         String
+  locationId        String
+  numFav            Int
+  numRenew          Int
+  phoneNumberPrefix String
+  position          AuAutoPosition
+  /// Multiple data types found: Float: 5.3%, Int: 94.7% out of 418 sampled entries
+  price             Json
+  priceShort        String
+  shareUrl          String?
+  status            String
+  taxType           String?
+  title             String
+  transmissionType  String?
+  updatedAt         DateTime          @db.Date
+  updatedUser       String?
+  urlList           String[]
+  view              Int
+  year              String?
+
+  @@unique([title, view, price, createdUser, autoBranch, autoType, bodyType, fuelType, taxType, transmissionType, autoCondition, year, color, code, address, locationId, compensationId], map: "Au_AutoUnique")
+  @@index([geolocation], map: "geolocation_2dsphere")
+}
+
+model au_autoAudit {
+  id          String          @id @map("_id")
+  createdAt   DateTime        @db.Date
+  createdUser String?
+  data        AuAutoAuditData
+  type        String
+}
+
+model au_autoBranch {
+  id          String   @id @map("_id")
+  autoType    String
+  createdAt   DateTime @db.Date
+  createdUser String
+  desc        String?
+  name        String
+  status      Boolean
+
+  @@unique([name, autoType], map: "Au_AutoBranchUnique")
+}
+
+model au_autoBranchAudit {
+  id          String                @id @map("_id")
+  createdAt   DateTime              @db.Date
+  createdUser String
+  data        AuAutoBranchAuditData
+  type        String
+}
+
+model au_autoBranchReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model au_autoReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model au_autoSubBranch {
+  id           String    @id @map("_id")
+  autoBranchId String
+  autoType     String
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  desc         String?
+  name         String
+  status       Boolean
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+
+  @@unique([name, autoBranchId], map: "Au_AutoSubBranchUnique")
+}
+
+model au_autoSubBranchAudit {
+  id          String                   @id @map("_id")
+  createdAt   DateTime                 @db.Date
+  createdUser String
+  data        AuAutoSubBranchAuditData
+  type        String
+}
+
+model au_autoSubBranchReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model backup_advertise {
+  id           String   @id @map("_id")
+  /// Multiple data types found: Array(BackupAdvertiseAdvertiseDoc): 6%, Array(Unknown): 94% out of 385 sampled entries
+  advertiseDoc Json?
+  createdAt    DateTime @db.Date
+  createdUser  String?
+  deletedUser  String
+}
+
+model backup_agent {
+  id          String              @id @map("_id")
+  agentDoc    BackupAgentAgentDoc
+  createdAt   DateTime            @db.Date
+  createdUser String?
+  deletedUser String
+}
+
+model backup_applyLoan {
+  id           String                        @id @map("_id")
+  applyLoanDoc BackupApplyLoanApplyLoanDoc[]
+  createdAt    DateTime                      @db.Date
+  createdUser  String?
+  deletedUser  String
+}
+
+model backup_property {
+  id          String                      @id @map("_id")
+  createdAt   DateTime                    @db.Date
+  createdUser String?
+  deletedUser String
+  propertyDoc BackupPropertyPropertyDoc[]
+}
+
+model backup_user {
+  id          String            @id @map("_id")
+  createdAt   DateTime          @db.Date
+  createdUser String?
+  userDoc     BackupUserUserDoc
+}
+
+model backup_wanted {
+  id          String                  @id @map("_id")
+  createdAt   DateTime                @db.Date
+  createdUser String?
+  deletedUser String
+  wantedDoc   BackupWantedWantedDoc[]
+}
+
+model branch {
+  id                    String    @id @map("_id")
+  address               String?
+  approvedAt            DateTime? @db.Date
+  associationId         String?
+  associationMemberCode String?
+  certificate           String?
+  certificateNumber     String?
+  certificateType       String?
+  code                  String
+  countryId             String
+  createdAt             DateTime  @db.Date
+  createdUser           String?
+  description           String?
+  email                 String?
+  enShortName           String
+  facebook              String?
+  isRenew               String?
+  isRequestToVerify     Boolean?
+  locationId            String?
+  logo                  String?
+  name                  String
+  phoneNumber           String
+  requestedAt           DateTime? @db.Date
+  startDate             DateTime? @db.Date
+  status                Boolean
+  telegram              String?
+  type                  String[]
+  updatedAt             DateTime? @db.Date
+  updatedUser           String?
+  verificationStatus    String?
+
+  @@unique([name, phoneNumber], map: "BranchUnique")
+}
+
+model branchAudit {
+  id          String          @id @map("_id")
+  createdAt   DateTime        @db.Date
+  createdUser String?
+  data        BranchAuditData
+  type        String
+}
+
+model branchReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model company {
+  id           String  @id @map("_id")
+  baseCurrency String
+  isPaid       Boolean
+  isRunDaily   Boolean
+  latinName    String
+  name         String
+  shortName    String
+  urlPayment   String
+}
+
+model exchange {
+  id          String        @id @map("_id")
+  base        String
+  createdAt   DateTime      @db.Date
+  createdUser String
+  exDate      DateTime      @db.Date
+  exDateName  String
+  rates       ExchangeRates
+  status      Boolean
+}
+
+model exchangeReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+}
+
+model meteor_accounts_loginServiceConfiguration {
+  id       String  @id @map("_id")
+  appId    String?
+  clientId String?
+  secret   String
+  service  String  @unique(map: "service_1")
+}
+
+model meteor_oauth_pendingCredentials {
+  id               String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  createdAt        Json?
+  /// Field referred in an index, but found no data to define the type.
+  credentialSecret Json?
+  /// Field referred in an index, but found no data to define the type.
+  key              Json?  @unique(map: "key_1")
+
+  @@index([credentialSecret], map: "credentialSecret_1")
+  @@index([createdAt], map: "createdAt_1")
+}
+
+model ref_agencyType {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  description String
+  name        String   @unique(map: "Ref_AgencyTypeUnique")
+  status      Boolean
+  typeId      String
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model ref_agencyTypeAudit {
+  id          String                 @id @map("_id")
+  createdAt   DateTime               @db.Date
+  createdUser String
+  data        RefAgencyTypeAuditData
+  type        String
+}
+
+model ref_agencyTypeReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model ref_district {
+  /// Multiple data types found: String: 99.9%, String (ObjectId): 0.1% out of 1000 sampled entries
+  id          Json      @id @map("_id")
+  countryId   String
+  createdAt   DateTime? @db.Date
+  createdUser String?
+  description String?
+  khName      String
+  locationId  String
+  name        String
+  /// Field referred in an index, but found no data to define the type.
+  statId      Json?
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+
+  @@unique([name, khName, statId, locationId, countryId, status], map: "Ref_DistrictUnique")
+}
+
+model ref_districtAudit {
+  id          String               @id @map("_id")
+  createdAt   DateTime             @db.Date
+  createdUser String
+  data        RefDistrictAuditData
+  type        String
+}
+
+model ref_districtReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model ref_location {
+  id          String    @id @map("_id")
+  countryId   String
+  createdAt   DateTime? @db.Date
+  createdUser String?
+  description String?
+  khName      String
+  name        String
+  /// Field referred in an index, but found no data to define the type.
+  statId      Json?
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+
+  @@unique([name, khName, statId, countryId, status], map: "Ref_LocationUnique")
+}
+
+model ref_locationAudit {
+  id          String               @id @map("_id")
+  createdAt   DateTime             @db.Date
+  createdUser String
+  data        RefLocationAuditData
+  type        String
+}
+
+model ref_locationReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model ref_propertyType {
+  id          String    @id @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  description Json?
+  language    String
+  name        String
+  nativeName  String
+  status      Boolean
+  type        String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+
+  @@unique([name, nativeName, type], map: "Ref_PropertyTypeUnique")
+}
+
+model ref_propertyTypeAudit {
+  id          String                   @id @map("_id")
+  createdAt   DateTime                 @db.Date
+  createdUser String
+  data        RefPropertyTypeAuditData
+  type        String
+}
+
+model ref_propertyTypeReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model ref_state {
+  id        String  @id @map("_id")
+  countryId String
+  /// Field referred in an index, but found no data to define the type.
+  khName    Json?
+  name      String
+  /// Field referred in an index, but found no data to define the type.
+  statId    Json?
+  status    Boolean
+
+  @@unique([name, khName, statId, countryId, status], map: "Ref_StateUnique")
+}
+
+model roles {
+  id   String @id @map("_id")
+  name String @unique(map: "name_1")
+}
+
+model sb_advertise {
+  id          String    @id @map("_id")
+  agencyId    String?
+  agentId     String?
+  count       Int?
+  countryCode String
+  createdAt   DateTime  @db.Date
+  createdUser String?
+  expiredDate String
+  propertyId  String?
+  startDate   String
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+  /// Field referred in an index, but found no data to define the type.
+  userId      Json?
+
+  @@unique([userId, propertyId, agencyId, agentId, expiredDate], map: "Sb_AdvertiseUnique")
+}
+
+model sb_advertiseAudit {
+  id          String               @id @map("_id")
+  createdAt   DateTime             @db.Date
+  createdUser String
+  data        SbAdvertiseAuditData
+  type        String
+}
+
+model sb_advertiseReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_agent {
+  id                    String    @id @map("_id")
+  address               String?
+  agentType             String
+  approvedAt            DateTime? @db.Date
+  associationId         String?
+  associationMemberCode String?
+  branchId              String?
+  certificate           String?
+  certificateNumber     String?
+  certificateType       String?
+  countryId             String
+  createdAt             DateTime  @db.Date
+  createdUser           String?
+  description           String?
+  dob                   String?
+  email                 String?
+  facebook              String?
+  heart                 Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  heartedUsers          Json?
+  isFormal              Boolean?
+  isRenew               String?
+  isRequestToVerify     Boolean?
+  license               String?
+  locationId            String?
+  memberCode            String
+  name                  String
+  /// Field referred in an index, but found no data to define the type.
+  nationId              Json?
+  phoneNumber           String
+  photo                 String?
+  requestedAt           DateTime? @db.Date
+  startDate             String?
+  status                Boolean
+  telegram              String?
+  totalAuto             Int?
+  totalProperty         Int?
+  type                  String?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  upLineListId          Json?
+  updatedAt             DateTime? @db.Date
+  updatedUser           String?
+  userId                String?
+  verificationStatus    String?
+  view                  Int?
+
+  @@unique([name, status, dob, startDate, phoneNumber, nationId, type, branchId], map: "Sb_AgentUnique")
+}
+
+model sb_agentAudit {
+  id          String           @id @map("_id")
+  createdAt   DateTime         @db.Date
+  createdUser String?
+  data        SbAgentAuditData
+  type        String
+}
+
+model sb_agentGroup {
+  id           String                   @id @map("_id")
+  commission   SbAgentGroupCommission[]
+  countryId    String
+  createdAt    DateTime                 @db.Date
+  createdUser  String
+  groupNumber  String
+  isShareGroup Boolean
+  locationId   String
+  name         String
+  status       Boolean
+  updatedAt    DateTime?                @db.Date
+  updatedUser  String?
+
+  @@unique([name, groupNumber, status], map: "Sb_AgentGroupUnique")
+}
+
+model sb_agentGroupAudit {
+  id          String                @id @map("_id")
+  createdAt   DateTime              @db.Date
+  createdUser String
+  data        SbAgentGroupAuditData
+  type        String
+}
+
+model sb_agentGroupReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_agentMemberGroup {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  groupNumber String
+  status      Boolean
+  userId      String
+}
+
+model sb_agentMemberGroupAudit {
+  id          String                      @id @map("_id")
+  createdAt   DateTime                    @db.Date
+  createdUser String
+  data        SbAgentMemberGroupAuditData
+  type        String
+}
+
+model sb_agentMemberGroupReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_agentReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_announcement {
+  id            String    @id @map("_id")
+  body          String
+  countryCode   String
+  createdAt     DateTime  @db.Date
+  createdUser   String
+  endDate       String
+  endMonthDay   String
+  startDate     String
+  startMonthDay String
+  title         String
+  updatedAt     DateTime? @db.Date
+  updatedUser   String?
+
+  @@unique([title, body, startDate, endDate], map: "Sb_AnnouncementUnique")
+}
+
+model sb_announcementAudit {
+  id          String                  @id @map("_id")
+  createdAt   DateTime                @db.Date
+  createdUser String
+  data        SbAnnouncementAuditData
+  type        String
+}
+
+model sb_announcementReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_applyLoan {
+  id                           String   @id @map("_id")
+  address                      String?
+  bankId                       String?
+  businessType                 String?
+  compOrBusCountryId           String?
+  compOrBusDistrictId          String?
+  compOrBusHomeNo              String?
+  compOrBusLocationId          String?
+  compOrBusStreetNo            String?
+  companyOrBusinessName        String?
+  countryId                    String?
+  createdAt                    DateTime @db.Date
+  createdUser                  String?
+  currencyCode                 String?
+  currencySymbol               String?
+  /// Multiple data types found: Float: 2%, Int: 98% out of 51 sampled entries
+  currentSalaryOrMonthlyIncome Json?
+  date                         String?
+  districtId                   String?
+  homeNo                       String?
+  locationId                   String?
+  maritalStatus                String?
+  name                         String
+  note                         String?
+  nrcNo                        String?
+  nrcPhoto                     String?
+  occupation                   String?
+  participatePercent           Int?
+  phoneNumber                  String?
+  /// Multiple data types found: Float: 0.7%, Int: 99.3% out of 428 sampled entries
+  price                        Json
+  propertyId                   String?
+  purposeId                    String?
+  selfiePhoto                  String?
+  streetNo                     String?
+  term                         Int?
+}
+
+model sb_applyLoanAudit {
+  id          String               @id @map("_id")
+  createdAt   DateTime             @db.Date
+  createdUser String
+  data        SbApplyLoanAuditData
+  type        String
+}
+
+model sb_applyLoanReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_appointment {
+  id          String    @id @map("_id")
+  branchId    String?
+  color       String
+  createdAt   DateTime  @db.Date
+  createdUser String
+  date        String
+  details     String?
+  end         Float
+  id_         String?   @map("id")
+  name        String
+  start       Float
+  timed       Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+  userId      String
+
+  @@unique([name, userId, date, start, end, branchId], map: "Sb_AppointmentUnique")
+}
+
+model sb_appointmentAudit {
+  id          String                 @id @map("_id")
+  createdAt   DateTime               @db.Date
+  createdUser String?
+  data        SbAppointmentAuditData
+  type        String
+}
+
+model sb_appointmentReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_businessType {
+  id          String    @id @map("_id")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  name        String    @unique(map: "Sb_BusinessTypeUnique")
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+model sb_businessTypeAudit {
+  id          String                  @id @map("_id")
+  createdAt   DateTime                @db.Date
+  createdUser String
+  data        SbBusinessTypeAuditData
+  type        String
+}
+
+model sb_businessTypeReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_category {
+  id          String    @id @map("_id")
+  code        String    @unique(map: "Sb_CategoryUnique")
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String
+  name        String
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+}
+
+model sb_categoryAudit {
+  id          String              @id @map("_id")
+  createdAt   DateTime            @db.Date
+  createdUser String
+  data        SbCategoryAuditData
+  type        String
+}
+
+model sb_categoryReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_client {
+  id                String    @id @map("_id")
+  address           String?
+  branchId          String?
+  /// Field referred in an index, but found no data to define the type.
+  checkIn           Json?
+  clientType        String?
+  createdAt         DateTime  @db.Date
+  createdUser       String
+  districtId        String?
+  dob               String?
+  email             String?
+  loanCycle         Int
+  locationId        String?
+  name              String
+  /// Field referred in an index, but found no data to define the type.
+  nationId          Json?
+  note              String?
+  openingBalance    Int
+  order             Int
+  phoneNumber       String
+  phoneNumberPrefix String?
+  type              String?
+  updatedAt         DateTime? @db.Date
+
+  @@unique([name, phoneNumber, nationId, type, checkIn], map: "Sb_ClientUnique")
+}
+
+model sb_clientAudit {
+  id          String            @id @map("_id")
+  createdAt   DateTime          @db.Date
+  createdUser String?
+  data        SbClientAuditData
+  type        String
+}
+
+model sb_clientReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_compensation {
+  id                 String   @id @map("_id")
+  configId           String
+  createdAt          DateTime @db.Date
+  createdUser        String
+  direct             Int
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  levelList          Json?
+  /// Field referred in an index, but found no data to define the type.
+  macCommissionLevel Json?
+  maxCommissionLevel Int
+  name               String
+  sponsor            Int
+  status             Boolean
+  type               String
+  upLine             Int
+
+  @@unique([name, status, type, macCommissionLevel], map: "Sb_CompensationUnique")
+}
+
+model sb_compensationReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+}
+
+model sb_config {
+  id                   String   @id @map("_id")
+  createdAt            DateTime @db.Date
+  createdUser          String
+  monthlyWithdraw      Int
+  paidCommissionIfOver Int
+  typeMonthlyWithdraw  String
+  typePaidCommission   String
+  withdrawDate         String
+
+  @@unique([paidCommissionIfOver, typePaidCommission, typeMonthlyWithdraw, monthlyWithdraw], map: "Sb_ConfigUnique")
+}
+
+model sb_configReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+}
+
+model sb_counter {
+  id          String    @id @map("_id")
+  count       Int
+  createdAt   DateTime  @db.Date
+  createdUser String?
+  groupType   String
+  prefix      String?
+  type        String
+  updatedAt   DateTime? @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_enrollmentPackage {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  description Json?
+  /// Field referred in an index, but found no data to define the type.
+  name        Json?
+  /// Field referred in an index, but found no data to define the type.
+  price       Json?
+  /// Field referred in an index, but found no data to define the type.
+  status      Json?
+
+  @@unique([name, status, price, description], map: "Sb_EnrollmentPackageUnique")
+}
+
+model sb_favorite {
+  id          String   @id @map("_id")
+  autoId      String?
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  propertyId  String?
+  type        String?
+  userId      String
+
+  @@unique([userId, propertyId, autoId, type], map: "Sb_FavoriteUnique")
+}
+
+model sb_favoriteAudit {
+  id          String              @id @map("_id")
+  createdAt   DateTime            @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  data        SbFavoriteAuditData
+  type        String
+}
+
+model sb_favoriteReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_home {
+  id           String    @id @map("_id")
+  body         String
+  buttonName   String?
+  category     String
+  countryCode  String
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  externalLink String?
+  sizePhoto    String
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+  url          String?
+  videoLink    String?
+
+  @@unique([body, url, videoLink], map: "Sb_HomeUnique")
+}
+
+model sb_homeAudit {
+  id          String          @id @map("_id")
+  createdAt   DateTime        @db.Date
+  createdUser String
+  data        SbHomeAuditData
+  type        String
+}
+
+model sb_homeReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_measuringArea {
+  id                    String                                 @id @map("_id")
+  /// Multiple data types found: Float: 96.3%, Int: 3.7% out of 682 sampled entries
+  area                  Json
+  createdAt             DateTime                               @db.Date
+  createdUser           String
+  initialCameraPosition SbMeasuringAreaInitialCameraPosition[]
+  latLng                SbMeasuringAreaLatLng[]
+  name                  String
+  staticMapUrl          String
+  userId                String
+  /// Multiple data types found: Float: 89.4%, Int: 10.6% out of 682 sampled entries
+  zoomLevel             Json
+
+  @@unique([name, area, userId], map: "Sb_MeasuringAreaUnique")
+}
+
+model sb_measuringAreaAudit {
+  id          String                   @id @map("_id")
+  createdAt   DateTime                 @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  data        SbMeasuringAreaAuditData
+  type        String
+}
+
+model sb_measuringAreaReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_notification {
+  id           String    @id @map("_id")
+  body         String
+  countryCode  String
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  externalLink String?
+  title        String
+  type         String?
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+  url          String?
+  videoLink    String?
+
+  @@unique([title, type, body], map: "Sb_NotificationUnique")
+}
+
+model sb_notificationAudit {
+  id          String                  @id @map("_id")
+  createdAt   DateTime                @db.Date
+  createdUser String
+  data        SbNotificationAuditData
+  type        String
+}
+
+model sb_notificationReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_plan {
+  id            String              @id @map("_id")
+  advertiseNote String
+  description   String
+  name          String              @unique(map: "Sb_PlanUnique")
+  order         Int
+  planCountry   SbPlanPlanCountry[]
+  status        Boolean
+  updatedAt     DateTime            @db.Date
+  updatedUser   String
+}
+
+model sb_planAudit {
+  id          String          @id @map("_id")
+  createdAt   DateTime        @db.Date
+  createdUser String
+  data        SbPlanAuditData
+  type        String
+}
+
+model sb_planReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_product {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  categoryId     Json?
+  /// Field referred in an index, but found no data to define the type.
+  code           Json?
+  /// Field referred in an index, but found no data to define the type.
+  compensationId Json?
+  /// Field referred in an index, but found no data to define the type.
+  price          Json?
+  /// Field referred in an index, but found no data to define the type.
+  projectId      Json?
+  /// Field referred in an index, but found no data to define the type.
+  unitId         Json?
+
+  @@unique([code, price, projectId, compensationId, unitId, categoryId], map: "Sb_ProductUnique")
+}
+
+model sb_project {
+  id          String    @id @map("_id")
+  countryId   String
+  createdAt   DateTime  @db.Date
+  createdUser String
+  description String
+  location    String
+  name        String
+  numberUnit  Int?
+  status      Boolean
+  updatedAt   DateTime? @db.Date
+  updatedUser String?
+  url         String[]
+  videoLink   String?
+
+  @@unique([name, description, url, videoLink], map: "Sb_ProjectUnique")
+}
+
+model sb_projectAudit {
+  id          String             @id @map("_id")
+  createdAt   DateTime           @db.Date
+  createdUser String
+  data        SbProjectAuditData
+  type        String
+}
+
+model sb_projectReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_property {
+  id                String                @id @map("_id")
+  actualPrice       Int?
+  additional        String[]
+  address           String
+  branchId          String?
+  /// Field referred in an index, but found no data to define the type.
+  categoryId        Json?
+  code              String
+  /// Multiple data types found: Float: 0.3%, Int: 99.7% out of 744 sampled entries
+  commissionFee     Json?
+  /// Field referred in an index, but found no data to define the type.
+  compensationId    Json?
+  countryCode       String
+  createdAt         DateTime              @db.Date
+  createdUser       String
+  currencyCode      String
+  currencySymbol    String?
+  /// Multiple data types found: Float: 5.7%, Int: 94.3% out of 669 sampled entries
+  depth             Json?
+  desc              String?
+  dimension         String
+  districtId        String?
+  fbPost_id         String?
+  firstCreatedAt    DateTime?             @db.Date
+  geolocation       SbPropertyGeolocation
+  groupType         String
+  isMarker          Boolean?
+  /// Multiple data types found: Float: 0.3%, Int: 99.7% out of 724 sampled entries
+  lastPrice         Json?
+  linkYoutube       String?
+  locationId        String
+  nearBy            SbPropertyNearBy[]
+  numBathroom       Int?
+  numBed            Int?
+  numFav            Int
+  numRenew          Int
+  phoneNumberPrefix String
+  position          SbPropertyPosition
+  /// Multiple data types found: Float: 0.3%, Int: 99.7% out of 1000 sampled entries
+  price             Json
+  /// Multiple data types found: Float: 78%, Int: 22% out of 997 sampled entries
+  pricePerSquare    Json?
+  priceShort        String
+  projectId         String?
+  propertyStatus    String
+  shareUrl          String
+  /// Multiple data types found: Float: 17.4%, Int: 82.6% out of 1000 sampled entries
+  size              Json
+  status            String
+  title             String
+  titleType         String?
+  type              String
+  /// Field referred in an index, but found no data to define the type.
+  unitId            Json?
+  updatedAt         DateTime              @db.Date
+  updatedUser       String?
+  urlList           String[]
+  view              Int
+  /// Multiple data types found: Float: 17.2%, Int: 82.8% out of 670 sampled entries
+  width             Json?
+
+  @@unique([title, view, price, createdUser, width, numBathroom, propertyStatus, numBed, depth, projectId, size, address, titleType, locationId, compensationId, unitId, categoryId], map: "Sb_PropertyUnique")
+  @@index([geolocation], map: "geolocation_2dsphere")
+}
+
+model sb_propertyAudit {
+  id          String              @id @map("_id")
+  createdAt   DateTime            @db.Date
+  createdUser String?
+  data        SbPropertyAuditData
+  type        String
+}
+
+model sb_propertyReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_propertyValuate {
+  id                  String                                @id @map("_id")
+  certificate         String?
+  createdAt           DateTime                              @db.Date
+  externalPropertyDoc SbPropertyValuateExternalPropertyDoc?
+  isExternalProperty  Boolean
+  name                String
+  paymentId           String
+  phoneNumber         String
+  propertyId          String?
+  updatedAt           DateTime?                             @db.Date
+  updatedUser         String?
+  userId              String
+  valuationStatus     String
+  valuator            String
+}
+
+model sb_propertyValuateAudit {
+  id          String                     @id @map("_id")
+  createdAt   DateTime                   @db.Date
+  createdUser String
+  data        SbPropertyValuateAuditData
+  type        String
+}
+
+model sb_propertyValuateReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_purpose {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  name        String   @unique(map: "Sb_PurposeUnique")
+}
+
+model sb_purposeReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_pushNotification {
+  id            String    @id @map("_id")
+  createdAt     DateTime  @db.Date
+  status        Int
+  transactionId String
+  type          String
+  updatedAt     DateTime? @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser   Json?
+  userId        String
+
+  @@unique([userId, transactionId, type], map: "Sb_PushNotificationUnique")
+}
+
+model sb_pushNotificationReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_repaymentFromSale {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  clientId Json?
+  /// Field referred in an index, but found no data to define the type.
+  date     Json?
+  /// Field referred in an index, but found no data to define the type.
+  paid     Json?
+  /// Field referred in an index, but found no data to define the type.
+  type     Json?
+  /// Field referred in an index, but found no data to define the type.
+  voucher  Json?
+
+  @@unique([clientId, type, date, paid, voucher], map: "Sb_RepaymentFromSaleUnique")
+}
+
+model sb_requestWithdraw {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  amount     Json?
+  /// Field referred in an index, but found no data to define the type.
+  date       Json?
+  /// Field referred in an index, but found no data to define the type.
+  reason     Json?
+  /// Field referred in an index, but found no data to define the type.
+  staffId    Json?
+  /// Field referred in an index, but found no data to define the type.
+  status     Json?
+  /// Field referred in an index, but found no data to define the type.
+  submitDate Json?
+
+  @@unique([staffId, amount, date, reason, submitDate, status], map: "Sb_RequestWithdrawUnique")
+}
+
+model sb_sale {
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  bookingPrice Json?
+  /// Field referred in an index, but found no data to define the type.
+  clientId     Json?
+  /// Field referred in an index, but found no data to define the type.
+  date         Json?
+  /// Field referred in an index, but found no data to define the type.
+  description  Json?
+  /// Field referred in an index, but found no data to define the type.
+  staffId      Json?
+  /// Field referred in an index, but found no data to define the type.
+  totalPrice   Json?
+  /// Field referred in an index, but found no data to define the type.
+  voucherNo    Json?
+
+  @@unique([staffId, clientId, date, voucherNo, description, totalPrice, bookingPrice], map: "Sb_SaleUnique")
+}
+
+model sb_staff {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  dob         Json?
+  /// Field referred in an index, but found no data to define the type.
+  name        Json?
+  /// Field referred in an index, but found no data to define the type.
+  nationId    Json?
+  /// Field referred in an index, but found no data to define the type.
+  phoneNumber Json?
+  /// Field referred in an index, but found no data to define the type.
+  startDate   Json?
+  /// Field referred in an index, but found no data to define the type.
+  status      Json?
+  /// Field referred in an index, but found no data to define the type.
+  type        Json?
+
+  @@unique([name, status, dob, startDate, phoneNumber, nationId, type], map: "Sb_StaffUnique")
+  @@unique([name, nationId, type], map: "Sb_StaffNationUnique")
+}
+
+model sb_unit {
+  id          String   @id @map("_id")
+  code        String
+  createdAt   DateTime @db.Date
+  createdUser String
+  name        String
+  updatedAt   DateTime @db.Date
+  updatedUser String
+
+  @@unique([name, code], map: "Sb_UnitUnique")
+}
+
+model sb_unitAudit {
+  id          String          @id @map("_id")
+  createdAt   DateTime        @db.Date
+  createdUser String
+  data        SbUnitAuditData
+  type        String
+}
+
+model sb_unitReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sb_userAccount {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  userId Json?  @unique(map: "Sb_UserAccountUnique")
+}
+
+model sb_userDocument {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  name        String
+  url         String
+  userId      String
+
+  @@unique([name, url, userId], map: "Sb_userDocumentUnique")
+}
+
+model sb_userDocumentAudit {
+  id          String                  @id @map("_id")
+  createdAt   DateTime                @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  data        SbUserDocumentAuditData
+  type        String
+}
+
+model sb_userDocumentReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_userPayment {
+  id                  String                            @id @map("_id")
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  agencyDoc           Json?
+  agentDoc            SbUserPaymentAgentDoc?
+  /// Multiple data types found: Float: 27.9%, Int: 72.1% out of 1000 sampled entries
+  amount              Json
+  createdAt           DateTime                          @db.Date
+  createdUser         String
+  date                String
+  /// Nested objects had no data in the sample dataset to introspect a nested type.
+  developerDoc        Json?
+  email               String?
+  externalPropertyDoc SbUserPaymentExternalPropertyDoc?
+  firstName           String?
+  lastName            String?
+  phone               String?
+  platform            String?
+  product_id          String?
+  propertyId          String?
+  req_time            String?
+  status              String
+  time                String
+  type                String
+  updatedAt           DateTime?                         @db.Date
+  upgradeTo           String?
+  userId              String
+  valuator            String?
+
+  @@unique([userId, amount, date, type, time], map: "Sb_UserPaymentUnique")
+}
+
+model sb_userPaymentReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_userSubscription {
+  /// Multiple data types found: String: 98.7%, Float: 1.3% out of 1000 sampled entries
+  id                           Json      @id @map("_id")
+  addOnAuto                    Int?
+  /// Multiple data types found: Float: 23.3%, Int: 76.7% out of 1000 sampled entries
+  addOnMeasurement             Json
+  /// Multiple data types found: Float: 1.3%, Int: 98.7% out of 1000 sampled entries
+  addOnProperty                Json
+  /// Multiple data types found: Float: 1.3%, Int: 98.7% out of 1000 sampled entries
+  addOnRenew                   Json
+  amount                       Int
+  createdAt                    DateTime? @db.Date
+  createdUser                  String?
+  endDate                      String
+  /// Multiple data types found: Float: 67.7%, Int: 32.3% out of 975 sampled entries
+  numAuto                      Json?
+  numAutoUse                   Int?
+  numDocument                  Int
+  numDocumentUse               Int
+  numDocumentUseDaily          Int
+  /// Multiple data types found: Float: 23.3%, Int: 76.7% out of 1000 sampled entries
+  numMeasurement               Json
+  /// Multiple data types found: Float: 23.3%, Int: 76.7% out of 1000 sampled entries
+  numMeasurementUse            Json
+  numProperty                  Int
+  /// Multiple data types found: Float: 1.3%, Int: 98.7% out of 1000 sampled entries
+  numPropertyUse               Json
+  numRenew                     Int
+  /// Multiple data types found: Float: 1.3%, Int: 98.7% out of 1000 sampled entries
+  numRenewUse                  Json
+  /// Multiple data types found: Float: 67.2%, Int: 32.8% out of 959 sampled entries
+  numSocialPost                Json?
+  numSocialPostUseDaily        Int?
+  planId                       String
+  planName                     String
+  reachDocUseDailyLimit        Boolean
+  reachSocialPostUseDailyLimit Boolean?
+  startDate                    String
+  status                       Boolean?
+  updatedAt                    DateTime? @db.Date
+  updatedUser                  String?
+  userId                       String
+
+  @@unique([userId, planId, startDate, endDate], map: "Sb_UserSubscriptionUnique")
+}
+
+model sb_userSubscriptionReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sb_version {
+  id                String @id @map("_id")
+  androidVersion    String
+  iOSVersion        String
+  newAndroidVersion String
+  newIOSVersion     String
+}
+
+model sb_wanted {
+  id            String    @id @map("_id")
+  contactNumber String
+  countryId     String?
+  createdAt     DateTime  @db.Date
+  createdUser   String?
+  description   String
+  districtId    String?
+  groupType     String
+  locationId    String?
+  maxPrice      Int
+  minPrice      Int
+  status        Boolean
+  /// Field referred in an index, but found no data to define the type.
+  title         Json?
+  type          String
+  updatedAt     DateTime? @db.Date
+  updatedUser   String?
+
+  @@unique([title, description, contactNumber, status], map: "Sb_WantedUnique")
+}
+
+model sb_wantedAudit {
+  id          String            @id @map("_id")
+  createdAt   DateTime          @db.Date
+  createdUser String?
+  data        SbWantedAuditData
+  type        String
+}
+
+model sb_wantedReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sc_audios {
+  id           String    @id @map("_id")
+  audioLink    String
+  category     String
+  commentCount Int
+  /// Field referred in an index, but found no data to define the type.
+  countryId    Json?
+  createdAt    DateTime  @db.Date
+  createdUser  String
+  duration     Int
+  likeCount    Int
+  shareCount   Int
+  status       Boolean
+  title        String
+  updatedAt    DateTime? @db.Date
+  updatedUser  String?
+  viewCount    Int
+
+  @@unique([id, title, category, countryId, audioLink], map: "Sc_AudioUnique")
+  @@index([countryId], map: "countryId_1")
+  @@index([countryId, id], map: "countryId_1__id_1")
+  @@index([category, id], map: "category_1__id_1")
+}
+
+model sc_audiosAudit {
+  id          String            @id @map("_id")
+  createdAt   DateTime          @db.Date
+  createdUser String
+  data        ScAudiosAuditData
+  type        String
+}
+
+model sc_audiosReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model sc_comments {
+  id            String    @id @map("_id")
+  comment       String
+  countryId     String?
+  createdAt     DateTime  @db.Date
+  createdUser   String
+  likeCount     Int
+  postId        String?
+  socialVideoId String?
+  type          String
+  updatedAt     DateTime? @db.Date
+
+  @@unique([id, comment, type, countryId, postId, createdUser], map: "Sc_CommentUnique")
+  @@index([type, countryId, postId], map: "type_1_countryId_1_postId_1")
+  @@index([type, countryId, postId, id], map: "type_1_countryId_1_postId_1__id_1")
+}
+
+model sc_follows {
+  id        String    @id @map("_id")
+  createdAt DateTime  @db.Date
+  relation  Boolean?
+  updatedAt DateTime? @db.Date
+  user1Id   String
+  user2Id   String
+}
+
+model sc_likes {
+  id            String   @id @map("_id")
+  commentId     String?
+  countryId     String?
+  createdAt     DateTime @db.Date
+  createdUser   String
+  postId        String?
+  /// Field referred in an index, but found no data to define the type.
+  socialAudioId Json?
+  socialVideoId String?
+  type          String
+
+  @@unique([type, countryId, postId, commentId, socialVideoId, socialAudioId, createdUser], map: "Sc_LikeUnique")
+  @@index([countryId, postId, createdUser], map: "countryId_1_postId_1_createdUser_1")
+  @@index([countryId, postId, commentId, createdUser], map: "countryId_1_postId_1_commentId_1_createdUser_1")
+  @@index([socialVideoId, createdUser], map: "socialVideoId_1_createdUser_1")
+}
+
+model sc_notifications {
+  id               String   @id @map("_id")
+  commentId        String?
+  createdAt        DateTime @db.Date
+  createdUser      String
+  createdUserImage String?
+  createdUserName  String
+  isRead           Boolean
+  postId           String?
+  type             String
+  userId           String
+
+  @@unique([userId, type, createdUser, id], map: "Sc_NotificationUnique")
+  @@index([type, userId, createdUser, id], map: "type_1_userId_1_createdUser_1__id_1")
+  @@index([userId], map: "userId_1")
+}
+
+model sc_posts {
+  id            String    @id @map("_id")
+  commentCount  Int
+  countryId     String
+  createdAt     DateTime  @db.Date
+  createdUser   String
+  description   String?
+  isObjective   Boolean?
+  likeCount     Int
+  link          String?
+  objectiveType String?
+  /// Multiple data types found: Array(String): 99.3%, Array(Unknown): 0.7% out of 922 sampled entries
+  photos        Json?
+  price         Int?
+  shareCount    Int
+  status        Boolean
+  type          String
+  updatedAt     DateTime? @db.Date
+  /// Multiple data types found: Array(String): 98.6%, Array(Unknown): 1.4% out of 150 sampled entries
+  videos        Json?
+  viewCount     Int
+
+  @@unique([id, description, type, countryId, status, createdUser], map: "Sc_PostUnique")
+  @@index([type, countryId], map: "type_1_countryId_1")
+  @@index([type, countryId, createdUser, id], map: "type_1_countryId_1_createdUser_1__id_1")
+}
+
+model sc_postsAudit {
+  id          String           @id @map("_id")
+  createdAt   DateTime         @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  data        ScPostsAuditData
+  type        String
+}
+
+model sc_postsReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser Json?
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model sc_reports {
+  id          String   @id @map("_id")
+  commentId   String?
+  createdAt   DateTime @db.Date
+  createdUser String
+  isChecked   Boolean
+  postId      String?
+  reason      String
+  status      Boolean
+  type        String
+  /// Field referred in an index, but found no data to define the type.
+  userId      Json?
+
+  @@index([postId, createdUser], map: "postId_1_createdUser_1")
+  @@index([postId, commentId, createdUser], map: "postId_1_commentId_1_createdUser_1")
+  @@index([userId, createdUser], map: "userId_1_createdUser_1")
+}
+
+model sc_videos {
+  id           String   @id @map("_id")
+  category     String?
+  commentCount Int
+  /// Field referred in an index, but found no data to define the type.
+  countryId    Json?
+  coverImage   String
+  createdAt    DateTime @db.Date
+  createdUser  String
+  description  String
+  likeCount    Int
+  shareCount   Int
+  status       Boolean
+  updatedAt    DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser  Json?
+  videoLink    String
+  viewCount    Int
+
+  @@unique([id, description, countryId, videoLink], map: "Sc_VideoUnique")
+  @@index([countryId], map: "countryId_1")
+  @@index([countryId, id], map: "countryId_1__id_1")
+  @@index([category, id], map: "category_1__id_1")
+}
+
+model sc_videosAudit {
+  id          String            @id @map("_id")
+  createdAt   DateTime          @db.Date
+  createdUser String
+  data        ScVideosAuditData
+  type        String
+}
+
+model sc_videosReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model twoCtwoP_transaction {
+  id                  String   @id @map("_id")
+  agentCode           String
+  amount              Int
+  cardNo              String?
+  channelCode         String
+  createdAt           DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  createdUser         Json?
+  currencyCode        String
+  invoiceNo           String
+  merchantID          String
+  referenceNo         String
+  respCode            String
+  respDesc            String
+  transactionDateTime Float
+}
+
+model userActions {
+  id            String                @id @map("_id")
+  action        String
+  createdAt     DateTime              @db.Date
+  isProperty    Boolean?
+  propertyId    String?
+  receiver      String?
+  searchDoc     UserActionsSearchDoc?
+  searchKeyword String?
+  type          String?
+  userId        String
+  wantedId      String?
+}
+
+model userAudit {
+  id          String        @id @map("_id")
+  createdAt   DateTime      @db.Date
+  createdUser String?
+  data        UserAuditData
+  type        String
+}
+
+model userReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  updatedUser Json?
+}
+
+model users {
+  id                 String        @id @map("_id")
+  agencyId           String?
+  agentId            String?
+  bio                String?
+  branch             String[]
+  coverUrl           String?
+  createdAt          DateTime      @db.Date
+  defaultBranch      String
+  developerId        String?
+  dob                String?
+  education          String?
+  email              String?
+  emails             UsersEmails[]
+  facebook           String?
+  followerCount      Int?
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  ipList             Json?
+  job_level          String?
+  locationId         String?
+  loginTokens        String
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  module             Json?
+  notificationId     String?
+  occupation         String?
+  payment_qr_code    String?
+  phoneNumber        String
+  phoneNumberPrefix  String
+  profile            UsersProfile
+  renewDate          String?
+  roles              String[]
+  /// Multiple data types found: Array(String): 99.9%, Array(Unknown): 0.1% out of 851 sampled entries
+  segmentList        Json?
+  services           UsersServices
+  smsCode            String
+  staffId            String
+  telegram           String?
+  type               String?
+  url                String
+  userType           String
+  username           String        @unique(map: "username_1")
+  verificationStatus String?
+  yearly_income      String?
+
+  @@unique([services.email.verificationTokens.token], map: "services.email.verificationTokens.token_1")
+  @@unique([services.password.enroll.token], map: "services.password.enroll.token_1")
+}
+
+model web_aboutForm {
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  detail Json?
+  /// Field referred in an index, but found no data to define the type.
+  name   Json?
+  /// Field referred in an index, but found no data to define the type.
+  url    Json?
+
+  @@unique([name, url, detail], map: "Web_AboutFormUnique")
+}
+
+model web_config {
+  id             String   @id @map("_id")
+  address        String
+  createdAt      DateTime @db.Date
+  createdUser    String
+  facebook       String
+  footer         String
+  instagram      String
+  linkIn         String
+  registerDetail String
+  /// Field referred in an index, but found no data to define the type.
+  title          Json?    @unique(map: "Web_ConfigUnique")
+  twitter        String
+  updatedAt      DateTime @db.Date
+  updatedUser    String
+}
+
+model web_configAudit {
+  id          String             @id @map("_id")
+  createdAt   DateTime           @db.Date
+  createdUser String
+  data        WebConfigAuditData
+  type        String
+}
+
+model web_configReact {
+  id          String   @id @map("_id")
+  createdAt   DateTime @db.Date
+  createdUser String
+  id_         String   @map("id")
+  updatedAt   DateTime @db.Date
+  updatedUser String
+}
+
+model web_contactForm {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  name     Json?
+  /// Field referred in an index, but found no data to define the type.
+  position Json?
+  /// Field referred in an index, but found no data to define the type.
+  url      Json?
+
+  @@unique([name, url, position], map: "Web_ContactFormUnique")
+}
+
+model web_images {
+  id  String @id @map("_id")
+  url String @unique(map: "Web_ImagesUnique")
+}
+
+model web_newFeed {
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Field referred in an index, but found no data to define the type.
+  createdUser    Json?
+  /// Field referred in an index, but found no data to define the type.
+  url            Json?
+  /// Field referred in an index, but found no data to define the type.
+  videoEmbedCode Json?
+  /// Field referred in an index, but found no data to define the type.
+  whatOnYourMind Json?
+
+  @@unique([url, videoEmbedCode, whatOnYourMind, createdUser], map: "Web_NewFeedUnique")
 }
