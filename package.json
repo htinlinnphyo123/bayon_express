@@ -5,6 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger": "node swagger/generate-swagger.js",
+    "swagger:watch": "nodemon --watch routes --watch src --watch modules --ext ts,js --exec node swagger/generate-swagger.js",
     "dev": "nodemon --exec ts-node -r tsconfig-paths/register src/server.ts"
   },
   "author": "",

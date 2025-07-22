@@ -61,5 +61,5 @@ swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
 
   // Step 3: Save back
   fs.writeFileSync(outputFile, JSON.stringify(swagger, null, 2));
-  console.log('✅ Swagger tags auto-grouped by prefix.');
+  console.log('Swagger File Modified successfully');
 });
