@@ -4058,7 +4058,7 @@ model users {
   type               String?
   url                String
   userType           String
-  username           String        @unique(map: "username_1")
+  username           String?        @unique(map: "username_1")
   verificationStatus String?
   yearly_income      String?
 

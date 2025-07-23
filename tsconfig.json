@@ -18,7 +18,8 @@
             "@mobile/*": ["modules/Mobile/*"],
             "@spa/*": ["modules/Spa/*"],
             "@web/*": ["modules/Web/*"],
-            "@config/*": ["config/*"]
+            "@config/*": ["config/*"],
+            "@util/*": ["utils/*"]
         }
     },
     "include": [

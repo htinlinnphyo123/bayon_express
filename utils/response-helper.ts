@@ -1,9 +1,13 @@
-import { Response, Request, NextFunction } from 'express';
-
-declare module 'express-serve-static-core' {
+import { Response, Request, NextFunction } from "express";
+import * as logger from '@util/logger';
+declare module "express-serve-static-core" {
   interface Response {
-    successResponse: (data: unknown, message?: string, code?: number) => Response;
-    failResponse: (message?: string, code?: number, data?: unknown) => Response;
+    successResponse: (
+      data: unknown,
+      message?: string,
+      code?: number
+    ) => Response;
+    failResponse: (error?: any, code?: number) => Response;
     unauthorizedResponse: (message?: string, data?: unknown) => Response;
     notFoundResponse: (message?: string, data?: unknown) => Response;
     validationErrorResponse: (message?: string, errors?: unknown) => Response;
@@ -11,10 +15,14 @@ declare module 'express-serve-static-core' {
   }
 }
 
-export default function responseHelper(req: Request, res: Response, next: NextFunction) {
+export default function responseHelper(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   res.successResponse = function (
     data: any,
-    message: string = 'Success',
+    message: string = "Success",
     code: number = 200
   ): Response {
     return res.status(code).json({
@@ -26,20 +34,25 @@ export default function responseHelper(req: Request, res: Response, next: NextFu
   };
 
   res.failResponse = function (
-    message: string = 'Failed',
-    code: number = 400,
-    data?: any
+    error: any = "Failed",
+    code: number = 500,
   ): Response {
-    return res.status(code).json({
-      success: false,
-      code,
-      message,
-      data,
-    });
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error instanceof Error
+          ? error.message
+          : JSON.stringify(error);
+      logger.error(errorMessage,error);
+      return res.status(code).json({
+        success: false,
+        code,
+        error: process.env.NODE_ENV !== "production" ? errorMessage : undefined,
+      });
   };
 
   res.unauthorizedResponse = function (
-    message: string = 'Unauthorized',
+    message: string = "Unauthorized",
     data?: any
   ): Response {
     return res.status(401).json({
@@ -51,7 +64,7 @@ export default function responseHelper(req: Request, res: Response, next: NextFu
   };
 
   res.notFoundResponse = function (
-    message: string = 'Not Found',
+    message: string = "Not Found",
     data?: any
   ): Response {
     return res.status(404).json({
@@ -60,10 +73,10 @@ export default function responseHelper(req: Request, res: Response, next: NextFu
       message,
       data,
     });
-  }; 
+  };
 
   res.serverErrorResponse = function (
-    message: string = 'Internal Server Error',
+    message: string = "Internal Server Error",
     data?: any
   ): Response {
     return res.status(500).json({

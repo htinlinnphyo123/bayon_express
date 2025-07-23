@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
+import util from 'util';
 
 // Configuration
 const config = {
@@ -18,13 +19,17 @@ const getCurrentDate = () => new Date().toISOString().split('T')[0];
 
 const getTimestamp = () => new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-const formatMessage = (level, message, context = {}) => {
+const formatMessage = (level: string, message: string, context: object = {}) => {
   const timestamp = getTimestamp();
-  const contextStr = Object.keys(context).length > 0 ? ` ${JSON.stringify(context)}` : '';
-  return `[${timestamp}] ${level.toUpperCase()}: ${message}${contextStr}`;
+  const contextStr = Object.keys(context).length > 0
+    ? ' ' + util.inspect(context, { depth: null, colors: false })
+    : '';
+
+  return `[${timestamp}] ${level.toUpperCase()}: ${message}${contextStr}\n..............................................................\n`;
 };
 
-const shouldLog = (level) => {
+
+const shouldLog = (level: string) => {
   const levels = ['debug', 'info', 'warning', 'error'];
   const levelIndex = levels.indexOf(level);
   const configLevelIndex = levels.indexOf(config.level);
@@ -56,7 +61,7 @@ const cleanOldLogs = () => {
 };
 
 // Core logging function
-const writeLog = (level, message, context = {}) => {
+const writeLog = (level: string, message: string, context: object = {}) => {
   if (!shouldLog(level)) return;
 
   const date = getCurrentDate();
@@ -72,25 +77,8 @@ const writeLog = (level, message, context = {}) => {
 };
 
 // Logger functions
-const debug = (message, context = {}) => writeLog('debug', message, context);
-const info = (message, context = {}) => writeLog('info', message, context);
-const warning = (message, context = {}) => writeLog('warning', message, context);
-const warn = (message, context = {}) => writeLog('warn', message, context);
-const error = (message, context = {}) => writeLog('error', message, context);
-
-// Export logger functions
-module.exports = {
-  debug,
-  info,
-  warning,
-  warn,
-  error
-};
-
-// Usage examples:
-// const logger = require('./logger');
-//
-// logger.info('Application started');
-// logger.error('Something went wrong', { userId: 123, action: 'login' });
-// logger.debug('Debug information');
-// logger.warning('Warning message');
+export const debug = (message: string, context: object = {}) => writeLog('debug', message, context);
+export const info = (message: string, context: object = {}) => writeLog('info', message, context);
+export const warning = (message: string, context: object = {}) => writeLog('warning', message, context);
+export const warn = (message: string, context: object = {}) => writeLog('warn', message, context);
+export const error = (message: string, context: object = {}) => writeLog('error', message, context);

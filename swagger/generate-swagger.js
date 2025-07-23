@@ -2,7 +2,7 @@ const fs = require('fs');
 const swaggerAutogen = require('swagger-autogen')();
 
 const outputFile = './swagger/swagger-output.json';
-const endpointsFiles = ['./src/app.ts']; // your entry point
+const endpointsFiles = ['./src/app.ts'];
 
 // Swagger metadata
 const doc = {
@@ -36,11 +36,7 @@ const doc = {
   ],
 };
 
-// Step 1: Generate Swagger JSON
 swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
-  // console.log('✅ Swagger documentation generated!');
-
-  // Step 2: Load and patch it to group routes by prefix
   const swagger = JSON.parse(fs.readFileSync(outputFile, 'utf-8'));
   for (const path in swagger.paths) {
     const methods = swagger.paths[path];
@@ -59,7 +55,7 @@ swaggerAutogen(outputFile, endpointsFiles, doc).then(() => {
     }
   }
 
-  // Step 3: Save back
+  // // Step 3: Save back
   fs.writeFileSync(outputFile, JSON.stringify(swagger, null, 2));
   console.log('Swagger File Modified successfully');
 });

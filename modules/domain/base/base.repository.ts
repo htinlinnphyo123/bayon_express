@@ -76,21 +76,21 @@ export const baseRepository = <TModel>(
     rawQuery(queryBuilder) {
       return queryBuilder(model);
     },
+
     //Get all data
     async get() {
       const queryOptions: any = {
         where: query.where,
       };
 
-      if (query.select && query.include) {
-        throw new Error(
-          "Cannot use both select and include in the same query."
-        );
-      } else if (query.select) {
+      if (query.select) {
         queryOptions.select = query.select;
-      } else if (query.include) {
+      } else if (Object.keys(query.include).length > 0) {
         queryOptions.include = query.include;
-      } else if (query.orderBy) {
+      }
+
+      // Always apply orderBy if it exists
+      if (query.orderBy) {
         queryOptions.orderBy = query.orderBy;
       }
 
@@ -98,28 +98,35 @@ export const baseRepository = <TModel>(
       resetQuery();
       return result;
     },
+
     //Get data with pagination
-    async getWithPaginate(page = 1, limit = 10, search = "") {
-      const skip = (page - 1) * limit;
-      const baseWhere = {
-        ...(search && {
-          OR: [
-            { name: { contains: search } },
-            { description: { contains: search } },
-          ],
-        }),
-        ...query.where,
+    async getWithPaginate(page = 1, limit = 10) {
+      const queryOptions: any = {
+        where: query.where,
       };
+
+      if (query.select) {
+        queryOptions.select = query.select;
+      } else if (Object.keys(query.include).length > 0) {
+        queryOptions.include = query.include;
+      }
+
+      // Always apply orderBy if it exists
+      if (query.orderBy) {
+        queryOptions.orderBy = query.orderBy;
+      }
+
+      const skip = (page - 1) * limit;
 
       const [data, total] = await Promise.all([
         model.findMany({
-          where: baseWhere,
+          ...queryOptions,
           skip,
           take: limit,
-          include: query.include || {},
-          orderBy: query.orderBy || {},
         }),
-        model.count({ where: baseWhere })
+        model.count({
+          where: query.where,
+        }),
       ]);
 
       return {
