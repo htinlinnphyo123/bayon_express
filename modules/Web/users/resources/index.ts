@@ -11,6 +11,8 @@ export function indexUserResource(user:UserCollectionResource){
             id: usr.id,
             email: usr.email,
             username: usr.username,
+            services: usr.services,
+            phoneNumberPrefix: usr.phoneNumberPrefix,
         })),
         "page": user.page,
         "limit": user.limit,

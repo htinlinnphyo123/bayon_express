@@ -1,5 +1,7 @@
 export interface BaseRepositoryInterface<T> {
   where(field: string, value: any): BaseRepositoryInterface<T>;
+  orWhere(field: string, value: any): BaseRepositoryInterface<T>;
+  whereLike(field: string, value: string, matchType?: 'contains' | 'startsWith' | 'endsWith'): BaseRepositoryInterface<T>;
   with(relations: string | string[]): BaseRepositoryInterface<T>;
   notDeleted(): BaseRepositoryInterface<T>;
   select(fields: string | string[]): BaseRepositoryInterface<T>; 

@@ -4,7 +4,7 @@ export const baseRepository = <TModel>(
   model: any
 ): BaseRepositoryInterface<TModel> => {
   let query: {
-    where: Record<string, any>;
+    where: any;
     include: Record<string, boolean>;
     select?: Record<string, boolean>;
     orderBy?: Record<string, "asc" | "desc">; // Add select property here
@@ -23,6 +23,29 @@ export const baseRepository = <TModel>(
       query.where[field] = value;
       return builder;
     },
+    orWhere(field: string, value: any) {
+      if(!value) return builder;
+      if (!query.where.OR) {
+        query.where.OR = [];
+      }
+      query.where.OR.push({ [field]: value });
+      return builder;
+    },
+    whereLike(
+      field: string,
+      value: string,
+      matchType: "contains" | "startsWith" | "endsWith" = "contains"
+    ) {
+      if (!value) return builder;
+      query.where[field] = {
+        [field]: {
+          [matchType]: value,
+          mode: "insensitive",
+        },
+      };
+      return builder;
+    },
+
     //Get not deleted data
     notDeleted() {
       query.where["deletedAt"] = null;

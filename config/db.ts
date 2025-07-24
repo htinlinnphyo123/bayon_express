@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-
+import * as logger from "@util/logger";
 /**
  * @docs https://www.prisma.io/docs/orm/prisma-client/observability-and-logging/logging
  */
@@ -25,10 +25,10 @@ const prisma = new PrismaClient({
 });
 
 prisma.$on("query", (e) => {
-  if (process.env.LISTEN_DB == "true") {
-    console.log("Query: " + e.query);
-    console.log("Params: " + e.params);
-    console.log("Duration: " + e.duration + "ms");
+  if (process.env.LISTEN_DB === "true") {
+    logger.info("Query: " + e.query);
+    logger.info("Params: " + e.params);
+    logger.info("Duration: " + e.duration + "ms");
   }
 });
 
